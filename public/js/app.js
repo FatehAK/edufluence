@@ -45,40 +45,68 @@ let edata = [];
 let epass = [];
 
 function homeToggle() {
-        landingPageDiv.style.display = 'block';
-		helpInfo.style.display = 'none';
-		aboutInfo.style.display = 'none';
-	    contactInfo.style.display = 'none';
+                 landingPageDiv.style.display = 'block';
+		 helpInfo.style.display = 'none';
+		 aboutInfo.style.display = 'none';
+	         contactInfo.style.display = 'none';
+		 requestExpertForm.style.display = 'none';
+	         waitingForExpert.style.display = 'none';
+	         expertListing.style.display = 'none';
+	         studentRegister.style.display = 'none';
+		 studentEntryDiv.style.display = 'none';
+	         expertSignupDiv.style.display = 'none';
+	         videoPageDiv.style.display = 'none';
     }
     toggleHome.addEventListener('click', homeToggle, false);
 
 function helpToggle() {
-        landingPageDiv.style.display = 'none';
+                landingPageDiv.style.display = 'none';
 		helpInfo.style.display = 'block';
 		aboutInfo.style.display = 'none';
-	    contactInfo.style.display = 'none';
+	        contactInfo.style.display = 'none';
+		requestExpertForm.style.display = 'none';
+	        waitingForExpert.style.display = 'none';
+	        expertListing.style.display = 'none';
+	        studentRegister.style.display = 'none';
+	        studentEntryDiv.style.display = 'none';
+	        expertSignupDiv.style.display = 'none';
+	        videoPageDiv.style.display = 'none';
     }
     toggleHelp.addEventListener('click', helpToggle, false);
 
 function aboutToggle() {
-        landingPageDiv.style.display = 'none';
+                landingPageDiv.style.display = 'none';
 		aboutInfo.style.display = 'block';
 		helpInfo.style.display = 'none';
-	    contactInfo.style.display = 'none';
+	        contactInfo.style.display = 'none';
+		requestExpertForm.style.display = 'none';
+	        waitingForExpert.style.display = 'none';
+	        expertListing.style.display = 'none';
+	        studentRegister.style.display = 'none';
+	        studentEntryDiv.style.display = 'none';
+	        expertSignupDiv.style.display = 'none';
+	        videoPageDiv.style.display = 'none';
     }
     toggleAbout.addEventListener('click', aboutToggle, false);
 
 function contactToggle() {
-        landingPageDiv.style.display = 'none';
+                landingPageDiv.style.display = 'none';
 		aboutInfo.style.display = 'none';
 		helpInfo.style.display = 'none';
 		contactInfo.style.display = 'block';
+	        requestExpertForm.style.display = 'none';
+	        waitingForExpert.style.display = 'none';
+	        expertListing.style.display = 'none';
+	        studentRegister.style.display = 'none';
+		studentEntryDiv.style.display = 'none';
+	        expertSignupDiv.style.display = 'none';
+	        videoPageDiv.style.display = 'none';
     }
     toggleContact.addEventListener('click', contactToggle, false);
 
 enterAsStudent.addEventListener('click', function(ev){
 	landingPageDiv.style.display = 'none';
-	helpInfo.style.display = 'non';
+	helpInfo.style.display = 'none';
 	studentEntryDiv.style.display = 'block';
 	expertSignupDiv.style.display = 'none';
 	videoPageDiv.style.display = 'none';
