@@ -105,6 +105,8 @@ function contactToggle() {
     toggleContact.addEventListener('click', contactToggle, false);
 
 enterAsStudent.addEventListener('click', function(ev){
+	studentName.value="";
+	studentPass.value="";
 	landingPageDiv.style.display = 'none';
 	helpInfo.style.display = 'none';
 	studentEntryDiv.style.display = 'block';
@@ -167,6 +169,8 @@ requestExpert.addEventListener('click', function(ev){
 }, false);
 
 enterAsExpert.addEventListener('click', function(ev){
+	expertName.value="";
+	expertPass.value="";
 	landingPageDiv.style.display = 'none';
 	studentEntryDiv.style.display = 'none';
 	expertSignupDiv.style.display = 'block';
