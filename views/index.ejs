@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="images/favicon.ico" />
+    <title>Edufluence</title>
+    <link href='https://fonts.googleapis.com/css?family=Raleway:700,400,300' rel='stylesheet' type='text/css'>
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/getscreenmedia.bundle.js"></script>
+  </head>
+  
+  <body>
+    <nav class="navbar navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a href="/"> <img src="images/weblogo.png" width="45px" height="50px"></a>
+	  <a href="/"> <img src="images/name.png" width="200px" height="50px"></a>
+        </div>
+       
+  <ul class="nav navbar-nav menu-right">
+    <li><a id = "toggleHome" href="#home">> Home</a></li>
+	<li><a id = "toggleAbout" href="#about">> About</a></li>
+    <li><a id = "toggleHelp" href="#help">> Help</a></li>
+	<li><a id = "toggleContact" href="#contact">> Contact</a></li>
+    </ul>
+    </div>
+    </nav>
+	
+    <div id="landingPage" class="mastHead landing-page">
+      <div class="container">
+        <div class="row">
+          <div class="col-xs-8 col-xs-offset-2 ">
+            <div class="starter-text">
+              <h1 style="color:white;font-size: 420%"><strong>WebRTC</strong></h1><br>
+              <p class="lead" style="color:white;font-size: 240%">Peer to Peer Learning</p>
+            </div>
+            <div class="starter-call-to-action">
+              <a href="" id="enterAsStudent" class="call-group" style="color:white;font-size: 140%">Student</a>
+              <a href="" id="enterAsExpert" class="call-group" style="color:white;font-size: 140%">Expert</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+	
+    <div id="studentEntry" class="mastHead" style="display: none;">
+      <div class="signin-to-app">
+        <h2>Welcome Student</h2>
+		
+        <div id="requestExpertForm">
+        <p>Student Login</p>  
+        <form class="form-inline" onsubmit='return false'>
+            <div class="form-group">
+              <input id="studentName" style="color:black;" class="input-styled" type="text" class="form-control" id="" placeholder="Username" required="required" autofocus>
+	      <br/><br/><input id="studentPass" style="color:black;" class="input-styled" type="password" class="form-control" onkeydown = "if (event.keyCode == 13)document.getElementById('requestExpert').click()" id="" placeholder="Password" required="required" autofocus>
+              <br/><br/><br/><button id="requestExpert" class="input-styled" type="button" >Request an Expert</button>
+	      <br/><button id="sRegister" class="input-styled" type="button" >Register</button>
+            </div>
+         </form>
+	  </div>
+		
+        <div id="waitingForExpert" class="loading-wrap" style="display: none;">
+          <span>Waiting for the expert to arrive..</span>
+          <div class="progress">
+            <div id="waitingForExpertProgress" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+            <span class="sr-only"></span>
+            </div>
+          </div>
+        </div>
+		
+        <div id="expertListing" class="expert-info" style="display: none;">
+          <div class="doc-img">
+            <img src="images/expert.jpg">
+          </div>
+          <div class="doc-text">
+            <span class="name">The Expert will see you now</span>
+            <span class="specialty"></span>
+            <button id="callExpert" class="input-styled" type="button">Call the Expert</button>
+          </div>
+        </div>
+		
+        <div id="studentRegister">
+	<p>Registration</p>  
+        <form class="form-inline" onsubmit='return false'>
+            <div class="form-group">
+              <input id="usName" style="color:black;" class="input-styled" type="text" class="form-control" id="" placeholder="Username" required="required" autofocus>
+	      <br/><br/><input id="usPass" style="color:black;" class="input-styled" type="password" class="form-control" id="" placeholder="Password" required="required" autofocus>
+	      <br/><br/><input id="usMail" style="color:black;" class="input-styled" type="email" class="form-control" id="" placeholder="E-Mail" required="required" autofocus>
+	      <br/><br/><input id="usColl" style="color:black;" class="input-styled" type="text" class="form-control" id="" placeholder="College" required="required" autofocus>
+	      <br/><br/><input id="usDept" style="color:black;" class="input-styled" type="text" class="form-control" onkeydown = "if (event.keyCode == 13)document.getElementById('ssRegister').click()" id="" placeholder="Department" required="required" autofocus>
+	      <br/><br/><br/><button id="ssRegister" class="input-styled" class="hov" type="button" >Register</button>
+            </div>
+          </form>
+	     </div>
+      </div>
+    </div>
+	
+    <div id="expertSignup" class="mastHead" style="display: none;">
+      <div class="signin-to-app signin-expert">
+        <h2>Welcome Expert</h2>
+	
+	<div id="expertSignupForm">
+	<p>Expert Login</p>
+          <form class="form-inline">
+            <div class="form-group" onsubmit='return false'>
+              <input class="input-styled" type="text" style="color:black;" class="form-control" id="expertName" placeholder="Username" required="required" autofocus>
+              <br/><br/><input id="expertPass" style="color:black;" class="input-styled" type="password" class="form-control" onkeydown = "if (event.keyCode == 13)document.getElementById('expertSignupButton').click()" id="" placeholder="Password" required="required" autofocus>
+	      <br/><br/><br/><button id="expertSignupButton" class="input-styled" type="button">Wait for Student</button>
+	      <br/><button id="eRegister" class="input-styled" type="button" >Register</button>
+            </div>
+        </form>
+	</div>
+		
+        <div id="waitingForStudent" class="loading-wrap" style="display: none;">
+          <span>Waiting for students to contact you..</span>
+          <div class="progress">
+            <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+              <span class="sr-only"></span>
+            </div>
+          </div>
+        </div>
+        
+    <div id="expertRegister">
+	<p>Registration</p>
+	<form class="form-inline" onsubmit='return false'>
+          <div class="form-group">
+             <input id="ueName" style="color:black;" class="input-styled" type="text" class="form-control" id="" placeholder="Username" required="required" autofocus>
+	     <br/><br/><input id="uePass" style="color:black;" class="input-styled" type="password" class="form-control" id="" placeholder="Password" required="required" autofocus>
+	     <br/><br/><input id="ueMail" style="color:black;" class="input-styled" type="email" class="form-control" id="" placeholder="E-Mail" required="required" autofocus>
+	     <br/><br/><input id="ueColl" style="color:black;" class="input-styled" type="text" class="form-control" id="" placeholder="College" required="required" autofocus>
+	     <br/><br/><input id="ueSpl" style="color:black;" class="input-styled" type="text" class="form-control" onkeydown = "if (event.keyCode == 13)document.getElementById('eeRegister').click()" id="" placeholder="Specialty" required="required" autofocus>
+             <br/><br/><br/><button id="eeRegister" class="input-styled" class="hov" type="button" >Register</button>
+            </div>
+          </form>
+	    </div>
+      </div>
+    </div>
+
+	<div id="helpInfo" class="mastHead" style="display: none;">
+	<div class="linkClass">
+	<h2><strong>Help</strong></h2>
+	<p> To establish the connection keep the following things in mind - 
+	<ol type="1">
+       <li>Click on either the Student or the Expert option then perform registration and login with the details and proceed with the connection.</li>
+       <li>Normally for the connection we need two devices but for testing purposes we can make use of two Chrome tabs where in one <br/>tab the Student logs in and in the other the Expert.</li>
+       <li>The student must make the connection first and the call is established once there is an expert waiting on the other end.</li>
+	   <li>Once the call is established you can call the Expert by clicking on the respective button.</li>
+	   <li>It is necessary to provide permission to access the device web camera so that the multimedia data can fetched and added to the user screens.</li>
+	   <li>The system supports messaging and file transfer where the files are selected through the input dialog box.</li>
+	   <li>For Screen sharing between the two users an extension need to be installed which is available at this <a href="https://chrome.google.com/webstore/detail/screensharing-sample/lfhgejbpjodfgebjlfiljdmghedjdmld" target="_blank">link</a> ,this is because Chrome does not <br/>natively allow obtaining the screen for security purposes so an extension had to be created for this reason.</li>
+    </ol></p>
+    </div></div>
+	
+	<div id="aboutInfo" class="mastHead" style="display: none;">
+	<div class="linkClass">
+	<h2><strong>About</strong></h2>
+	<p> To WebRTC Peer to Peer Learning system has the following objectives - 
+	<ol type="1">
+       <li><strong>Real time communication with experts: </strong>The system allows for direct real time communication with the experts and the live interactions are beneficial to the students.</li>
+       <li><strong>Plug-in free mechanism: </strong>The system does not require any additional plug-ins and third party software and due to lack of plug-ins the overall setup time is reduced.</li>
+       <li><strong>Readily available for public usage: </strong>The system is readily available for active use by the end users since the system is hosted on a public server and accessible via the URL.</li>
+	   <li><strong>Permits dynamic interactions: </strong>The participants can interact through media data such as voice, video, and also use screen and file sharing for more active participation.</li>
+	   <li><strong>Cost effectiveness: </strong>No infrastructure costs for setting up separate servers are involved and  hence this technology is more affordable to set up and use.</li>
+	   <li><strong>Privacy guarantees: </strong>All traffic is routed directly between the peers and does not pass through a server ensuring privacy.</li>
+    </ol>To get more information on the specifics you can checkout this <a href="https://www.html5rocks.com/en/tutorials/webrtc/basics/" target="_blank">link</a></p>
+    </div></div>
+
+	<div id="contactInfo" class="mastHead" style="display: none;">
+	<div class="linkClass">
+	<h2><strong>Contact</strong></h2>
+	<p><center>For any queries and service complaints<center><center>E-Mail us at <span style="color: blue;">fatehalikhanh@gmail.com</span></center><center>We will get back to you as soon as we can.</center></p>
+	<p><center><strong><span style="color:#2e6d9e; font-size:24px;">Greetings from EDUFLUENCE</span></strong></center></p><img src="images/weblogo.png" width="50px" height="60px">
+    </div></div>
+	
+    <div id="videoPage" class="mastHead" style="display: none;">
+      <div class="video-page-holder video-page-holder-horizontal">
+        <div class="left">
+          <div class="video-wrap">
+            <div class="main-video">
+              <video id="mainVideoTag" class="" autoplay></video>
+            </div>
+            <div class="small-video">
+              <video id="smallVideoTag" autoplay muted="muted"></video>
+            </div>
+          </div>
+          
+         <div class="actions-holder">
+	     <a id="muteMyself" class="input-styled" href="javascript:void(0)">Mute</a>
+	     <a id="pauseMyVideo" class="input-styled" href="javascript:void(0)">Pause Video</a>
+	     <a id="shareMyScreen" class="input-styled" href="javascript:void(0)">Share Screen</a><br/>
+         </div>
+
+          <form class="send-file form-inline">
+	    <div class="form-group" style="margin: 0 auto;">
+		<input type="file" id="sendFile" class="space-styled" style="display: inline;"/>
+		<progress id="fileProgress" value=“1” max="100" style="display: inline;" class="progress-styled"></progress><br/>
+		<a id="receivedFileLink"></a><br/>
+	    </div>
+          </form>
+  
+          <form class="send-message form-inline" onsubmit='return false'>
+            <div class="form-group">
+		       <input id="myMessage" class="input-styled" type="text" class="form-control" onkeydown = "if (event.keyCode == 13)document.getElementById('sendMessage').click()" id="" value="" placeholder="Enter your message" autofocus>
+		       <button id="sendMessage" class="input-styled" type="button">Send Message</button>
+            </div>
+          </form>
+        </div>
+        
+        <div class="right">
+        <div id="messageHolder" class="message-holder">
+		<div id="messageInName" class="message-in"></div>
+		<div id="messageOutName" class="message-out"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/webrtc.js"></script>
+    <script src="js/app.js"></script>
+	
+  </body>
+</html>
