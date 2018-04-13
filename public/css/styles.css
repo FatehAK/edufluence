@@ -63,7 +63,8 @@ ul {
 .mastHead{
   min-height: 2500px;
   padding: 39px 0 40px;
-  background: url('../images/skyline.jpg');
+  background: url('../images/skyline.jpg') no-repeat center fixed; 
+  background-size: cover;
  
   background-position: center top;  
   color: #fff;
@@ -86,10 +87,10 @@ ul {
 .starter-call-to-action .call-group{
   display: inline-block;
   background: rgb(0, 0, 0);
-  line-height: 60px;
-  padding: 0 30px;
+  line-height: 70px;
+  padding: 0 40px;
   color: #fff;
-  margin: 0 10px;  
+  margin: 10px 10px;  
   text-decoration: none;
 }
 .starter-call-to-action .call-group:hover{
