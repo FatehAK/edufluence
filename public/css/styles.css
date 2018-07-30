@@ -72,6 +72,14 @@ ul {
   padding-top: 180px;  
   min-height: 1500px;
 }
+.head-style {
+  color: white;
+  font-size: 420%;
+}
+.subhead-style {
+  color: white;
+  font-size: 240%;
+}
 .starter-call-to-action{
   margin: 10px auto 0;
   text-align: center;
