@@ -363,8 +363,18 @@ ul {
   border: none;
   background: #3b5386;
 }
- @media screen and (min-width: 1920px) {
-  .video-page-holder .video-wrap{
+@media screen and (min-width: 1920px) {
+.head-style {
+  font-size: 480%;
+}
+.subhead-style {
+  font-size: 300%;
+}
+.call-style {
+  color: white;
+  font-size: 160%;
+}
+.video-page-holder .video-wrap{
   width: 1650px;
   height: 760px;
 }
@@ -390,21 +400,8 @@ ul {
 }
 .starter-call-to-action .call-group{
   line-height: 60px;
-  padding: 0 35px;
-  margin: 0px 10px;  
-}
-}
- @media screen and (min-width: 1600px and max-width: 1920px) {
-.video-page-holder .video-wrap{
-  width: 1340px;
-  height: 770px;
-}
-.video-page-holder-horizontal .right .message-holder{
-  height: 935px;
-}
-.send-file input[type="text"],
-.send-message input[type="text"]{
-  width: 1170px;
+  padding: 5px 35px;
+  margin: 10px 10px;  
 }
 }
    
