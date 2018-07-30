@@ -36,18 +36,17 @@ body{
 .menu-right{
   float:left;
 }
+
 ul {
     list-style-type: none;
     margin: 10;
     padding: 12;
     overflow: hidden;
     background-color: #ffffff;
-   
 }
 
-
 .linkClass{
-	display: inline-block;
+    display: inline-block;
     width: auto;
     min-width: 530px;
     min-height:340px;
@@ -55,9 +54,9 @@ ul {
     padding: 20px 20px 20px;
     background: rgba(255, 255, 255, 0.99);
     color:black; 
-	text-align: left;
-	line-height: 40px;
-	font-size: 16px;
+    text-align: left;
+    line-height: 40px;
+    font-size: 16px;
 }
 
 .mastHead{
@@ -65,7 +64,6 @@ ul {
   padding: 39px 0 40px;
   background: url('../images/skyline.jpg') no-repeat center fixed; 
   background-size: cover;
- 
   background-position: center top;  
   color: #fff;
   text-align: center;
@@ -87,15 +85,19 @@ ul {
 .starter-call-to-action .call-group{
   display: inline-block;
   background: rgb(0, 0, 0);
-  line-height: 70px;
-  padding: 0 40px;
+  line-height: 60px;
+  padding: 0 35px;
   color: #fff;
-  margin: 10px 10px;  
+  margin: 0px 10px;  
   text-decoration: none;
 }
 .starter-call-to-action .call-group:hover{
   background: rgb(59, 109, 146);
 }
+.call-style {
+  color: white;
+  font-size: 120%;
+}	
 .signin-to-app{
   display: inline-block;
   width: auto;
@@ -233,8 +235,8 @@ ul {
   margin-top: 20px;
 }
 .video-page-holder .video-wrap{
-  width: 1650px;
-  height: 760px;
+  width: 1109px;
+  height: 440px;
   position: relative;
 }
 .video-wrap video{
@@ -269,7 +271,6 @@ ul {
 .space-styled{
   margin: 0 5px;
   width: 195px;
-
 }
 .progress-styled{
   width:280px;
@@ -279,17 +280,17 @@ ul {
   color: #fff;
   margin: 0 5px;
   background: rgb(59, 83, 134);
-  width: 160px;
+  width: 125px;
   height: 45px;
 }
 .send-file,
 .send-message{
-  margin-bottom: 10px;
+  margin-bottom: 1px;
 }
 .send-file input[type="text"],
 .send-message input[type="text"]{
-  width: 1420px;
-  margin-left: 20px;
+  width: 945px;
+  margin-left: 0;
   color:black;
   height:34px;
 }
@@ -304,7 +305,7 @@ ul {
   width: 140px;
   background: #3b5386;
   height:34px;
-  margin-left:10px;
+  margin-left: 4px;
 }
 .send-message button:hover{
   background: #7c86d6;
@@ -348,7 +349,7 @@ ul {
 }
 .video-page-holder-horizontal .right .message-holder{
   width: 100%;
-  height: 930px;
+  height: 605px;
 }
 .video-page-holder-horizontal .right .message-holder{
   border: none;
