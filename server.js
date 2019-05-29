@@ -6,26 +6,26 @@ console.log('server started on port ' + PORT);
 
 app.use(express.static(__dirname + '/public'));
 
-app.get('/', function(req, res){
-	res.render('index.ejs');
+app.get('/', function(req, res) {
+    res.render('index.ejs');
 });
 
 app.listen(process.env.PORT || PORT);
 
 app.io.route('signal', function(req) {
-	req.io.join(req.data);
-	req.io.join('files');
-	app.io.room(req.data).broadcast('signal', {
-		user_type: req.data.user_type,
-		user_name: req.data.user_name,
-		user_data: req.data.user_data,
-		command: req.data.command
-	})
+    req.io.join(req.data);
+    req.io.join('files');
+    app.io.room(req.data).broadcast('signal', {
+        user_type: req.data.user_type,
+        user_name: req.data.user_name,
+        user_data: req.data.user_data,
+        command: req.data.command
+    })
 })
 
 app.io.route('files', function(req) {
-	req.io.room('files').broadcast('files', {
-		filename: req.data.filename,
-		filesize: req.data.filesize
-	});
+    req.io.room('files').broadcast('files', {
+        filename: req.data.filename,
+        filesize: req.data.filesize
+    });
 })
