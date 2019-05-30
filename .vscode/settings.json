@@ -1,0 +1,27 @@
+{
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/node_modules": true,
+        "**/*.sh": true,
+        "**/build": true,
+        "**/*.md": true,
+        "**/.unotes": true,
+        "**/.cache": true,
+        "**/package-lock.json": true,
+        "**/dist": true,
+        "**/.vscode": true,
+        "**/.babelrc": true,
+        "**/yarn.lock": true,
+        "**/.gitignore": true,
+        "**/.editorconfig": true,
+        "public\\js/bootstrap.js": true,
+        "public\\js/bootstrap.min.js": true,
+        "public\\js/npm.js": true,
+        "public\\js/getscreenmedia.bundle.js": true,
+        "Procfile": true
+    }
+}
