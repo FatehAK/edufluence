@@ -41,7 +41,9 @@ io.on('signal', function(data) {
         document.querySelector('#videoPage').style.display = 'block';
     }
     else if (data.user_type == 'signaling') {
-        if (!rtcPeerConn) startSignaling();
+        if (!rtcPeerConn) {
+            startSignaling();
+        }
         var message = JSON.parse(data.user_data);
         if (message.sdp) {
             rtcPeerConn.setRemoteDescription(new RTCSessionDescription(message.sdp), function() {
@@ -60,9 +62,18 @@ function startSignaling() {
     console.log('starting signaling...');
     rtcPeerConn = new webkitRTCPeerConnection(configuration);
     dataChannel = rtcPeerConn.createDataChannel('textMessages', dataChannelOptions);
-    dataChannel.onopen = dataChannelStateChanged;
-    rtcPeerConn.ondatachannel = receiveDataChannel;
 
+    dataChannel.onopen = function() {
+        if (dataChannel.readyState === 'open') {
+            console.log('Data Channel open');
+            dataChannel.onmessage = receiveDataChannelMessage;
+        }
+    };
+    rtcPeerConn.ondatachannel = function(evt) {
+        console.log('Receiving a data channel');
+        dataChannel = evt.channel;
+        dataChannel.onmessage = receiveDataChannelMessage;
+    };
     rtcPeerConn.onicecandidate = function(evt) {
         if (evt.candidate)
             io.emit('signal', {
@@ -93,10 +104,15 @@ function startSignaling() {
         rtcPeerConn.addStream(stream);
     }, logError);
 }
+
 function sendLocalDesc(desc) {
     rtcPeerConn.setLocalDescription(desc, function() {
         console.log('sending local description');
-        io.emit('signal', { 'user_type': 'signaling', 'command': 'SDP', 'user_data': JSON.stringify({ 'sdp': rtcPeerConn.localDescription }) });
+        io.emit('signal', {
+            user_type: 'signaling',
+            command: 'SDP',
+            user_data: JSON.stringify({ sdp: rtcPeerConn.localDescription })
+        });
     }, logError);
 }
 
@@ -150,25 +166,13 @@ var fileBuffer = [];
 var fileSize = 0;
 var fileTransferring = false;
 
-function dataChannelStateChanged() {
-    if (dataChannel.readyState === 'open') {
-        console.log('Data Channel open');
-        dataChannel.onmessage = receiveDataChannelMessage;
-    }
-}
-
-function receiveDataChannel(evt) {
-    console.log('Receiving a data channel');
-    dataChannel = evt.channel;
-    dataChannel.onmessage = receiveDataChannelMessage;
-}
-
 function receiveDataChannelMessage(evt) {
     console.log('From DataChannel: ' + evt.data);
     if (fileTransferring) {
         fileBuffer.push(evt.data);
         fileSize += evt.data.byteLength;
         fileProgress.value = fileSize;
+
         if (fileSize === receivedFileSize) {
             var received = new window.Blob(fileBuffer);
             fileBuffer = [];
@@ -223,11 +227,12 @@ sendFile.addEventListener('change', function() {
         filename: file.name,
         filesize: file.size
     });
+
     appendChatMessage("sending " + file.name, 'message-in');
     fileTransferring = true;
-
     fileProgress.max = file.size;
     var chunkSize = 16384;
+
     var sliceFile = function(offset) {
         var reader = new window.FileReader();
         reader.onload = (function() {
@@ -250,7 +255,8 @@ var shareMyScreen = document.querySelector('#shareMyScreen');
 shareMyScreen.addEventListener('click', function(evt) {
     shareScreenText = 'Share Screen';
     stopShareScreenText = 'Stop Sharing';
-    console.log('Screen share button text: ' + shareMyScreen.innerHTML)
+    console.log('Screen share button text: ' + shareMyScreen.innerHTML);
+
     if (shareMyScreen.innerHTML == shareScreenText) {
         var msg = 'Sharing my screen...';
         appendChatMessage(msg, 'message-in');
@@ -263,10 +269,8 @@ shareMyScreen.addEventListener('click', function(evt) {
                 rtcPeerConn.addStream(stream);
             }
         });
-
         shareMyScreen.innerHTML = stopShareScreenText;
-    }
-    else {
+    } else {
         console.log('Resetting my stream to video...');
         navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
         navigator.getUserMedia({
