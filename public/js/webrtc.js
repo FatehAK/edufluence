@@ -85,7 +85,7 @@ function startSignaling() {
         }
     }
     // dataChannel = rtcPeerConn.createDataChannel('textMessages', dataChannelOptions);
-    dataChannel = rtcPeerConn.createDataChannel('mychannel', { negotiated: true, id: 0 });
+    dataChannel = rtcPeerConn.createDataChannel('mychannel');
     dataChannel.binaryType = 'arraybuffer';
     console.log(dataChannel);
 
@@ -165,31 +165,36 @@ var fileSize = 0;
 var fileTransferring = false;
 
 function receiveDataChannelMessage(evt) {
-    console.log('From DataChannel: ' + evt.data);
-    if (fileTransferring) {
-        fileBuffer.push(evt.data);
-        fileSize += evt.data.byteLength;
-        fileProgress.value = fileSize;
+    // console.log('From DataChannel: ' + evt.data);
+    try {
+        if (fileTransferring) {
+            fileBuffer.push(evt.data);
+            fileSize += evt.data.byteLength;
+            fileProgress.value = fileSize;
 
-        if (fileSize === receivedFileSize) {
-            var received = new window.Blob(fileBuffer);
-            fileBuffer = [];
-            downloadLink.href = URL.createObjectURL(received);
-            downloadLink.download = receivedFileName;
-            downloadLink.appendChild(document.createTextNode(receivedFileName + '(' + fileSize + ') bytes'));
-            fileTransferring = false;
-            var linkTag = document.createElement('a');
-            linkTag.href = URL.createObjectURL(received);
-            linkTag.download = receivedFileName;
-            linkTag.appendChild(document.createTextNode(receivedFileName));
-            var div = document.createElement('div');
-            div.className = 'message-out';
-            div.appendChild(linkTag);
-            messageHolder.appendChild(div);
+            if (fileSize === receivedFileSize) {
+                var received = new window.Blob(fileBuffer);
+                fileBuffer = [];
+                downloadLink.href = URL.createObjectURL(received);
+                downloadLink.download = receivedFileName;
+                downloadLink.appendChild(document.createTextNode(receivedFileName + '(' + fileSize + ') bytes'));
+                fileTransferring = false;
+                var linkTag = document.createElement('a');
+                console.log(received);
+                linkTag.href = URL.createObjectURL(received);
+                linkTag.download = receivedFileName;
+                linkTag.appendChild(document.createTextNode(receivedFileName));
+                var div = document.createElement('div');
+                div.className = 'message-out';
+                div.appendChild(linkTag);
+                messageHolder.appendChild(div);
+            }
         }
-    }
-    else {
-        appendChatMessage(evt.data, 'message-out');
+        else {
+            appendChatMessage(evt.data, 'message-out');
+        }
+    } catch (err) {
+        console.log(err);
     }
 }
 
@@ -220,34 +225,38 @@ io.on('files', function(data) {
 });
 
 sendFile.addEventListener('change', function() {
-    var file = sendFile.files[0];
-    console.log('sending file ' + file.name + ' (' + file.size + ') ...');
-    io.emit('files', {
-        filename: file.name,
-        filesize: file.size
-    });
+    try {
+        var file = sendFile.files[0];
+        console.log('sending file ' + file.name + ' (' + file.size + ') ...');
+        io.emit('files', {
+            filename: file.name,
+            filesize: file.size
+        });
 
-    appendChatMessage("sending " + file.name, 'message-in');
-    fileTransferring = true;
-    fileProgress.max = file.size;
-    var chunkSize = 16384;
+        appendChatMessage("sending " + file.name, 'message-in');
+        fileTransferring = true;
+        fileProgress.max = file.size;
+        var chunkSize = 16384;
 
-    var sliceFile = function(offset) {
-        var reader = new window.FileReader();
-        reader.onload = (function() {
-            return function(e) {
-                dataChannel.send(e.target.result);
-                if (file.size > offset + e.target.result.byteLength) {
-                    window.setTimeout(sliceFile, 0, offset + chunkSize);
-                }
-                fileProgress.value = offset + e.target.result.byteLength;
-            };
-        })(file);
-        var slice = file.slice(offset, offset + chunkSize);
-        reader.readAsArrayBuffer(slice);
-    };
-    sliceFile(0);
-    fileTransferring = false;
+        var sliceFile = function(offset) {
+            var reader = new window.FileReader();
+            reader.onload = (function() {
+                return function(e) {
+                    dataChannel.send(e.target.result);
+                    if (file.size > offset + e.target.result.byteLength) {
+                        window.setTimeout(sliceFile, 0, offset + chunkSize);
+                    }
+                    fileProgress.value = offset + e.target.result.byteLength;
+                };
+            })(file);
+            var slice = file.slice(offset, offset + chunkSize);
+            reader.readAsArrayBuffer(slice);
+        };
+        sliceFile(0);
+        fileTransferring = false;
+    } catch (err) {
+        console.log(err);
+    }
 });
 
 /* muting and pausing video */
