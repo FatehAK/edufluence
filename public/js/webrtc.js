@@ -171,7 +171,9 @@ function receiveDataChannelMessage(evt) {
             fileBuffer.push(evt.data);
             fileSize += evt.data.byteLength;
             fileProgress.value = fileSize;
-
+            console.log('fileProgress: ' + fileProgress.value);
+            console.log('fileSize: ' + fileSize);
+            console.log('receivedFileSize: ' + receivedFileSize);
             if (fileSize === receivedFileSize) {
                 var received = new window.Blob(fileBuffer);
                 fileBuffer = [];
