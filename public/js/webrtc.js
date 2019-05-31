@@ -11,10 +11,10 @@ var configuration = {
 var rtcPeerConn;
 var mainVideoArea = document.querySelector('#mainVideoTag');
 var smallVideoArea = document.querySelector('#smallVideoTag');
-var dataChannelOptions = {
-    ordered: false,
-    maxPacketLifeTime: 1000,
-};
+// var dataChannelOptions = {
+//     ordered: false,
+//     maxPacketLifeTime: 1000,
+// };
 var dataChannel;
 
 io.on('signal', async function(data) {
@@ -85,7 +85,9 @@ function startSignaling() {
             rtcPeerConn = new webkitRTCPeerConnection(configuration);
         }
     }
-    dataChannel = rtcPeerConn.createDataChannel('textMessages', dataChannelOptions);
+    // dataChannel = rtcPeerConn.createDataChannel('textMessages', dataChannelOptions);
+    dataChannel = rtcPeerConn.createDataChannel('mychannel');
+    dataChannel.binaryType = 'arraybuffer';
 
     dataChannel.onopen = function() {
         if (dataChannel.readyState === 'open') {
