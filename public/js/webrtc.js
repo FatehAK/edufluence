@@ -171,7 +171,6 @@ function receiveDataChannelMessage(evt) {
             fileBuffer.push(evt.data);
             fileSize += evt.data.byteLength;
             fileProgress.value = fileSize;
-            console.log('fileProgress: ' + fileProgress.value);
             console.log('fileSize: ' + fileSize);
             console.log('receivedFileSize: ' + receivedFileSize);
             if (fileSize === receivedFileSize) {
@@ -193,6 +192,7 @@ function receiveDataChannelMessage(evt) {
             }
         }
         else {
+            console.log('messaging');
             appendChatMessage(evt.data, 'message-out');
         }
     } catch (err) {
@@ -244,6 +244,7 @@ sendFile.addEventListener('change', function() {
             var reader = new window.FileReader();
             reader.onload = (function() {
                 return function(e) {
+                    console.log('e.target' + e.target.result);
                     dataChannel.send(e.target.result);
                     if (file.size > offset + e.target.result.byteLength) {
                         window.setTimeout(sliceFile, 0, offset + chunkSize);
