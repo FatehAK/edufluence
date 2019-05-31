@@ -5,18 +5,18 @@ var theirName = '';
 var myUserType = '';
 var configuration = {
     iceServers: [
-        // {
-        //     urls: 'stun:stun.l.google.com:19302',
-        // },
-        // {
-        //     urls: 'turn:numb.viagenie.ca',
-        //     username: 'nyt3fyre@gmail.com',
-        //     credential: 'fyrexfyre'
-        // },
+        {
+            urls: 'stun:stun.l.google.com:19302',
+        },
         {
             urls: 'turn:13.250.13.83:3478?transport=udp',
             username: 'YzYNCouZM1mhqhmseWk6',
             credential: 'YzYNCouZM1mhqhmseWk6'
+        },
+        {
+            urls: 'turn:numb.viagenie.ca',
+            username: 'nyt3fyre@gmail.com',
+            credential: 'fyrexfyre'
         }
     ]
 };
@@ -74,7 +74,7 @@ io.on('signal', async function(data) {
             } else if (message.candidate) {
                 await setTimeout(() => {
                     rtcPeerConn.addIceCandidate(new RTCIceCandidate(message.candidate)).catch((err) => console.log(err))
-                }, 500);
+                }, 2000);
             }
         } catch (err) {
             console.log('SDP error :' + err);
