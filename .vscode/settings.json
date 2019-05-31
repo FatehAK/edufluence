@@ -20,8 +20,8 @@
         "**/.editorconfig": true,
         "public\\js/bootstrap.js": true,
         "public\\js/bootstrap.min.js": true,
-        "public\\js/npm.js": true,
-        "public\\js/getscreenmedia.bundle.js": true,
+        "public\\js/npm.js": false,
+        "public\\js/getscreenmedia.bundle.js": false,
         "Procfile": true
     }
 }

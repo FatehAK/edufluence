@@ -5,7 +5,7 @@ var theirName = '';
 var myUserType = '';
 var configuration = {
     iceServers: [{
-        url: 'stun:stun.l.google.com:19302'
+        urls: 'stun:stun.l.google.com:19302'
     }]
 };
 var rtcPeerConn;
@@ -17,9 +17,8 @@ var dataChannelOptions = {
 };
 var dataChannel;
 
-io.on('signal', function(data) {
+io.on('signal', async function(data) {
     if (data.user_type === 'expert' && data.command === 'joinroom') {
-        console.log('The expert is here!');
         if (myUserType === 'student') {
             theirName = data.user_name;
             document.querySelector('#messageOutName').textContent = theirName;
@@ -30,8 +29,9 @@ io.on('signal', function(data) {
         document.querySelector('#expertListing').style.display = 'block';
     }
     else if (data.user_type === 'student' && data.command === 'callexpert') {
-        console.log('Student is calling');
-        if (!rtcPeerConn) startSignaling();
+        if (!rtcPeerConn) {
+            startSignaling();
+        }
         if (myUserType === 'expert') {
             theirName = data.user_name;
             document.querySelector('#messageOutName').textContent = theirName;
@@ -41,26 +41,50 @@ io.on('signal', function(data) {
         document.querySelector('#videoPage').style.display = 'block';
     }
     else if (data.user_type == 'signaling') {
-        if (!rtcPeerConn) {
-            startSignaling();
-        }
+        // if (!rtcPeerConn) {
+        //     console.log('peer in 2');
+        //     startSignaling();
+        // }
         var message = JSON.parse(data.user_data);
-        if (message.sdp) {
-            rtcPeerConn.setRemoteDescription(new RTCSessionDescription(message.sdp), function() {
-                if (rtcPeerConn.remoteDescription.type === 'offer' && myUserType === 'expert') {
-                    rtcPeerConn.createAnswer(sendLocalDesc, logError);
+        console.log(message.sdp);
+        try {
+            if (message.sdp) {
+                if (message.sdp.type === 'offer' && myUserType === 'expert') {
+                    console.log('offering');
+                    await rtcPeerConn.setRemoteDescription(new RTCSessionDescription(message.sdp)).catch((err) => console.log(err));
+                    await rtcPeerConn.setLocalDescription(await rtcPeerConn.createAnswer());
+                    io.emit('signal', {
+                        user_type: 'signaling',
+                        command: 'SDP',
+                        user_data: JSON.stringify({ sdp: rtcPeerConn.localDescription })
+                    });
+                } else if (message.sdp.type === 'answer' && myUserType === 'student') {
+                    console.log('answering');
+                    await rtcPeerConn.setRemoteDescription(new RTCSessionDescription(message.sdp)).catch((err) => console.log(err));
+                } else {
+                    console.log('Unsupported SDP type.');
                 }
-            }, logError);
-        }
-        else {
-            rtcPeerConn.addIceCandidate(new RTCIceCandidate(message.candidate));
+            } else if (message.candidate) {
+                await setTimeout(() => rtcPeerConn.addIceCandidate(new RTCIceCandidate(message.candidate)).catch((err) => console.log(err)), 5000);
+            }
+        } catch (err) {
+            console.log('SDP error :' + err);
         }
     }
 });
 
+//on negotiation called
 function startSignaling() {
     console.log('starting signaling...');
-    rtcPeerConn = new webkitRTCPeerConnection(configuration);
+    if (RTCPeerConnection) {
+        //firefox
+        rtcPeerConn = new RTCPeerConnection(configuration);
+    } else {
+        if (webkitRTCPeerConnection) {
+            //chrome
+            rtcPeerConn = new webkitRTCPeerConnection(configuration);
+        }
+    }
     dataChannel = rtcPeerConn.createDataChannel('textMessages', dataChannelOptions);
 
     dataChannel.onopen = function() {
@@ -75,49 +99,54 @@ function startSignaling() {
         dataChannel.onmessage = receiveDataChannelMessage;
     };
     rtcPeerConn.onicecandidate = function(evt) {
+        called = true;
         if (evt.candidate)
             io.emit('signal', {
                 user_type: 'signaling',
                 command: 'icecandidate',
                 user_data: JSON.stringify({ candidate: evt.candidate })
             });
-        console.log('completed sending an ice candidate...');
     };
-    rtcPeerConn.onnegotiationneeded = function() {
+
+    let negotiating;
+    rtcPeerConn.onnegotiationneeded = async function() {
         console.log('on negotiation called');
         if (myUserType === 'student') {
-            rtcPeerConn.createOffer(sendLocalDesc, logError);
+            try {
+                if (negotiating || rtcPeerConn.signalingState != "stable") return;
+                negotiating = true;
+                await rtcPeerConn.setLocalDescription(await rtcPeerConn.createOffer());
+                io.emit('signal', {
+                    user_type: 'signaling',
+                    command: 'SDP',
+                    user_data: JSON.stringify({ sdp: rtcPeerConn.localDescription })
+                });
+            } catch (err) {
+                console.error(err);
+            } finally {
+                negotiating = false;
+            }
         }
     };
-    rtcPeerConn.onaddstream = function(evt) {
-        console.log('going to add their stream...');
-        mainVideoArea.srcObject = evt.stream;
+
+    rtcPeerConn.ontrack = function(evt) {
+        mainVideoArea.srcObject = evt.streams[0];
     };
 
-    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-    navigator.getUserMedia({
+    let constraints = {
         audio: true,
         video: true
-    }, function(stream) {
-        console.log('going to display my stream...');
-        smallVideoArea.srcObject = stream;
-        rtcPeerConn.addStream(stream);
-    }, logError);
-}
-
-function sendLocalDesc(desc) {
-    rtcPeerConn.setLocalDescription(desc, function() {
-        console.log('sending local description');
-        io.emit('signal', {
-            user_type: 'signaling',
-            command: 'SDP',
-            user_data: JSON.stringify({ sdp: rtcPeerConn.localDescription })
+    };
+    navigator.mediaDevices.getUserMedia(constraints)
+        .then(function(stream) {
+            smallVideoArea.srcObject = stream;
+            stream.getTracks().forEach(function(track) {
+                rtcPeerConn.addTrack(track, stream);
+            });
+        })
+        .catch(function(err) {
+            console.log(err);
         });
-    }, logError);
-}
-
-function logError(error) {
-    console.log('error occured: ' + error);
 }
 
 var muteMyself = document.querySelector('#muteMyself');
@@ -157,6 +186,7 @@ pauseMyVideo.addEventListener('click', function(evt) {
     evt.preventDefault();
 });
 
+/* messaging and file transfer */
 var messageHolder = document.querySelector('#messageHolder');
 var myMessage = document.querySelector('#myMessage');
 var sendMessage = document.querySelector('#sendMessage');
@@ -209,6 +239,7 @@ function appendChatMessage(msg, className) {
     messageHolder.appendChild(div);
 }
 
+/* file transfer */
 var sendFile = document.querySelector('#sendFile');
 var fileProgress = document.querySelector('#fileProgress');
 var downloadLink = document.querySelector('#receivedFileLink');
@@ -251,6 +282,7 @@ sendFile.addEventListener('change', function() {
     fileTransferring = false;
 });
 
+/* screen sharing */
 var shareMyScreen = document.querySelector('#shareMyScreen');
 shareMyScreen.addEventListener('click', function(evt) {
     shareScreenText = 'Share Screen';
@@ -266,21 +298,29 @@ shareMyScreen.addEventListener('click', function(evt) {
             } else {
                 console.log('got a stream', stream);
                 smallVideoArea.srcObject = stream;
-                rtcPeerConn.addStream(stream);
+                stream.getTracks().forEach(function(track) {
+                    rtcPeerConn.addTrack(track, stream);
+                });
             }
         });
         shareMyScreen.innerHTML = stopShareScreenText;
     } else {
         console.log('Resetting my stream to video...');
-        navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-        navigator.getUserMedia({
+        let constraints = {
             audio: true,
             video: true
-        }, function(stream) {
-            console.log('going to display my stream...');
-            smallVideoArea.srcObject = stream;
-            rtcPeerConn.addStream(stream);
-        }, logError);
+        };
+        navigator.mediaDevices.getUserMedia(constraints)
+            .then(function(stream) {
+                smallVideoArea.srcObject = stream;
+                stream.getTracks().forEach(function(track) {
+                    rtcPeerConn.addTrack(track, stream);
+                });
+            })
+            .catch(function(err) {
+                console.log(err);
+            });
+
         shareMyScreen.innerHTML = shareScreenText;
     }
     evt.preventDefault();

@@ -250,8 +250,8 @@ callExpert.addEventListener('click', function(evt) {
         command: 'callexpert'
     });
     console.log('student ' + studentUserName + ' is calling.');
-    if (!rtcPeerConn) {
-        startSignaling();
-    }
+    // if (!rtcPeerConn) {
+    //     startSignaling();
+    // }
     evt.preventDefault();
 });
