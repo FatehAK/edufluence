@@ -46,7 +46,6 @@ io.on('signal', async function(data) {
         //     startSignaling();
         // }
         var message = JSON.parse(data.user_data);
-        console.log(message.sdp);
         try {
             if (message.sdp) {
                 if (message.sdp.type === 'offer' && myUserType === 'expert') {
@@ -86,9 +85,13 @@ function startSignaling() {
         }
     }
     // dataChannel = rtcPeerConn.createDataChannel('textMessages', dataChannelOptions);
-    dataChannel = rtcPeerConn.createDataChannel('mychannel');
+    dataChannel = rtcPeerConn.createDataChannel('mychannel', { negotiated: true, id: 0 });
     dataChannel.binaryType = 'arraybuffer';
+    console.log(dataChannel);
 
+    dataChannel.onerror = (error) => {
+        console.log("Data Channel Error:", error);
+    };
     dataChannel.onopen = function() {
         if (dataChannel.readyState === 'open') {
             console.log('Data Channel open');
@@ -150,43 +153,6 @@ function startSignaling() {
             console.log(err);
         });
 }
-
-var muteMyself = document.querySelector('#muteMyself');
-var pauseMyVideo = document.querySelector('#pauseMyVideo');
-
-muteMyself.addEventListener('click', function(evt) {
-    console.log('muting/unmuting myself');
-    var streams = rtcPeerConn.getLocalStreams();
-    for (var stream of streams) {
-        for (var audioTrack of stream.getAudioTracks()) {
-            if (audioTrack.enabled) {
-                muteMyself.innerHTML = 'Unmute'
-            } else {
-                muteMyself.innerHTML = 'Mute Myself'
-            }
-            audioTrack.enabled = !audioTrack.enabled;
-        }
-        console.log('Local stream: ' + stream.id);
-    }
-    evt.preventDefault();
-});
-
-pauseMyVideo.addEventListener('click', function(evt) {
-    console.log('pausing/unpausing my video');
-    var streams = rtcPeerConn.getLocalStreams();
-    for (var stream of streams) {
-        for (var videoTrack of stream.getVideoTracks()) {
-            if (videoTrack.enabled) {
-                pauseMyVideo.innerHTML = 'Start Video'
-            } else {
-                pauseMyVideo.innerHTML = 'Pause Video'
-            }
-            videoTrack.enabled = !videoTrack.enabled;
-        }
-        console.log('Local stream: ' + stream.id);
-    }
-    evt.preventDefault();
-});
 
 /* messaging and file transfer */
 var messageHolder = document.querySelector('#messageHolder');
@@ -282,6 +248,44 @@ sendFile.addEventListener('change', function() {
     };
     sliceFile(0);
     fileTransferring = false;
+});
+
+/* muting and pausing video */
+var muteMyself = document.querySelector('#muteMyself');
+var pauseMyVideo = document.querySelector('#pauseMyVideo');
+
+muteMyself.addEventListener('click', function(evt) {
+    console.log('muting/unmuting myself');
+    var streams = rtcPeerConn.getLocalStreams();
+    for (var stream of streams) {
+        for (var audioTrack of stream.getAudioTracks()) {
+            if (audioTrack.enabled) {
+                muteMyself.innerHTML = 'Unmute'
+            } else {
+                muteMyself.innerHTML = 'Mute Myself'
+            }
+            audioTrack.enabled = !audioTrack.enabled;
+        }
+        console.log('Local stream: ' + stream.id);
+    }
+    evt.preventDefault();
+});
+
+pauseMyVideo.addEventListener('click', function(evt) {
+    console.log('pausing/unpausing my video');
+    var streams = rtcPeerConn.getLocalStreams();
+    for (var stream of streams) {
+        for (var videoTrack of stream.getVideoTracks()) {
+            if (videoTrack.enabled) {
+                pauseMyVideo.innerHTML = 'Start Video'
+            } else {
+                pauseMyVideo.innerHTML = 'Pause Video'
+            }
+            videoTrack.enabled = !videoTrack.enabled;
+        }
+        console.log('Local stream: ' + stream.id);
+    }
+    evt.preventDefault();
 });
 
 /* screen sharing */
