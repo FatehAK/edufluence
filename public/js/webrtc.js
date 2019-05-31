@@ -248,7 +248,7 @@ sendFile.addEventListener('change', function() {
                     console.log('res: ' + res);
                     dataChannel.send(e.target.result);
                     if (file.size > offset + e.target.result.byteLength) {
-                        window.setTimeout(sliceFile, 100, offset + chunkSize);
+                        window.setTimeout(sliceFile, 0, offset + chunkSize);
                     }
                     fileProgress.value = offset + e.target.result.byteLength;
                 };
