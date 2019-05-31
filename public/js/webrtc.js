@@ -244,7 +244,7 @@ sendFile.addEventListener('change', function() {
             var reader = new window.FileReader();
             reader.onload = (function() {
                 return function(e) {
-                    console.log('e.target' + e.target.result);
+                    console.log('e.target' + e.target.result.byteLength);
                     dataChannel.send(e.target.result);
                     if (file.size > offset + e.target.result.byteLength) {
                         window.setTimeout(sliceFile, 0, offset + chunkSize);
