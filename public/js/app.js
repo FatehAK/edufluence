@@ -1,43 +1,43 @@
-let landingPageDiv = document.querySelector('#landingPage');
-let studentEntryDiv = document.querySelector('#studentEntry');
-let expertSignupDiv = document.querySelector('#expertSignup');
-let videoPageDiv = document.querySelector('#videoPage');
+const landingPageDiv = document.querySelector('#landingPage');
+const studentEntryDiv = document.querySelector('#studentEntry');
+const expertSignupDiv = document.querySelector('#expertSignup');
+const videoPageDiv = document.querySelector('#videoPage');
 
-let studentName = document.querySelector('#studentName');
-let studentPass = document.querySelector('#studentPass');
-let expertName = document.querySelector('#expertName');
-let expertPass = document.querySelector('#expertPass');
-let enterAsStudent = document.querySelector('#enterAsStudent');
-let requestExpert = document.querySelector('#requestExpert');
-let requestExpertForm = document.querySelector('#requestExpertForm');
-let waitingForExpert = document.querySelector('#waitingForExpert');
-let waitingForExpertProgress = document.querySelector('#waitingForExpertProgress');
-let expertSignupForm = document.querySelector('#expertSignupForm');
-let expertSignupButton = document.querySelector('#expertSignupButton');
-let waitingForStudent = document.querySelector('#waitingForStudent');
-let expertListing = document.querySelector('#expertListing');
-let callExpert = document.querySelector('#callExpert');
-let enterAsExpert = document.querySelector('#enterAsExpert');
-let studentRegister = document.querySelector('#studentRegister');
-let toggleHelp = document.querySelector('#toggleHelp');
-let helpInfo = document.querySelector('#helpInfo');
-let toggleAbout = document.querySelector('#toggleAbout');
-let aboutInfo = document.querySelector('#aboutInfo');
-let toggleContact = document.querySelector('#toggleContact');
-let contactInfo = document.querySelector('#contactInfo');
-let toggleHome = document.querySelector('#toggleHome');
+const studentName = document.querySelector('#studentName');
+const studentPass = document.querySelector('#studentPass');
+const expertName = document.querySelector('#expertName');
+const expertPass = document.querySelector('#expertPass');
+const enterAsStudent = document.querySelector('#enterAsStudent');
+const requestExpert = document.querySelector('#requestExpert');
+const requestExpertForm = document.querySelector('#requestExpertForm');
+const waitingForExpert = document.querySelector('#waitingForExpert');
+const waitingForExpertProgress = document.querySelector('#waitingForExpertProgress');
+const expertSignupForm = document.querySelector('#expertSignupForm');
+const expertSignupButton = document.querySelector('#expertSignupButton');
+const waitingForStudent = document.querySelector('#waitingForStudent');
+const expertListing = document.querySelector('#expertListing');
+const callExpert = document.querySelector('#callExpert');
+const enterAsExpert = document.querySelector('#enterAsExpert');
+const studentRegister = document.querySelector('#studentRegister');
+const toggleHelp = document.querySelector('#toggleHelp');
+const helpInfo = document.querySelector('#helpInfo');
+const toggleAbout = document.querySelector('#toggleAbout');
+const aboutInfo = document.querySelector('#aboutInfo');
+const toggleContact = document.querySelector('#toggleContact');
+const contactInfo = document.querySelector('#contactInfo');
+const toggleHome = document.querySelector('#toggleHome');
 
-let usName = document.querySelector('#usName');
-let usPass = document.querySelector('#usPass');
-let usMail = document.querySelector('#usMail');
-let usColl = document.querySelector('#usColl');
-let usDept = document.querySelector('#usDept');
+const usName = document.querySelector('#usName');
+const usPass = document.querySelector('#usPass');
+const usMail = document.querySelector('#usMail');
+const usColl = document.querySelector('#usColl');
+const usDept = document.querySelector('#usDept');
 
-let ueName = document.querySelector('#ueName');
-let uePass = document.querySelector('#uePass');
-let ueMail = document.querySelector('#ueMail');
-let ueColl = document.querySelector('#ueColl');
-let ueSpl = document.querySelector('#ueSpl');
+const ueName = document.querySelector('#ueName');
+const uePass = document.querySelector('#uePass');
+const ueMail = document.querySelector('#ueMail');
+const ueColl = document.querySelector('#ueColl');
+const ueSpl = document.querySelector('#ueSpl');
 
 toggleHome.addEventListener('click', function() {
     landingPageDiv.style.display = 'block';
@@ -139,9 +139,13 @@ function pushdata() {
         requestExpertForm.style.display = 'none';
         studentRegister.style.display = 'block';
     } else {
-        localStorage.setItem(usName.value.toLowerCase(), usName.value.toLowerCase());
-        localStorage.setItem(usPass.value.toLowerCase(), usPass.value.toLowerCase());
-        alert('Registered Successfully');
+        if (!localStorage.getItem(usName.value.toLowerCase()) && !localStorage.getItem(usPass.value.toLowerCase())) {
+            localStorage.setItem(usName.value.toLowerCase(), usName.value.toLowerCase());
+            localStorage.setItem(usPass.value.toLowerCase(), usPass.value.toLowerCase());
+            alert('Registered Successfully');
+        } else {
+            alert('Username not available try a different one?');
+        }
     }
 }
 
@@ -210,9 +214,13 @@ function pushedata() {
         expertSignupForm.style.display = 'none';
         expertRegister.style.display = 'block';
     } else {
-        localStorage.setItem(ueName.value.toLowerCase(), ueName.value.toLowerCase());
-        localStorage.setItem(uePass.value.toLowerCase(), uePass.value.toLowerCase());
-        alert('Registered Successfully');
+        if (!localStorage.getItem(ueName.value.toLowerCase()) && !localStorage.getItem(uePass.value.toLowerCase())) {
+            localStorage.setItem(ueName.value.toLowerCase(), ueName.value.toLowerCase());
+            localStorage.setItem(uePass.value.toLowerCase(), uePass.value.toLowerCase());
+            alert('Registered Successfully');
+        } else {
+            alert('Username not available try a different one?');
+        }
     }
 }
 
@@ -229,7 +237,7 @@ expertSignupButton.addEventListener('click', function(evt) {
             user_data: expertPass.value,
             command: 'joinroom'
         });
-        console.log('Mr. ' + expertUserName + ' has joined.');
+        console.log('expert ' + expertUserName + ' has joined.');
     } else {
         alert('Please check your details');
         expertName.value = '';
@@ -250,8 +258,5 @@ callExpert.addEventListener('click', function(evt) {
         command: 'callexpert'
     });
     console.log('student ' + studentUserName + ' is calling.');
-    // if (!rtcPeerConn) {
-    //     startSignaling();
-    // }
     evt.preventDefault();
 });

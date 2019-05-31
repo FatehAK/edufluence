@@ -1,9 +1,9 @@
 io = io.connect();
 
-var myName = '';
-var theirName = '';
-var myUserType = '';
-var configuration = {
+let myName = '';
+let theirName = '';
+let myUserType = '';
+const configuration = {
     iceServers: [
         {
             urls: 'stun:stun.l.google.com:19302',
@@ -20,10 +20,10 @@ var configuration = {
         }
     ]
 };
-var rtcPeerConn;
-var mainVideoArea = document.querySelector('#mainVideoTag');
-var smallVideoArea = document.querySelector('#smallVideoTag');
-var dataChannel;
+let rtcPeerConn;
+const mainVideoArea = document.querySelector('#mainVideoTag');
+const smallVideoArea = document.querySelector('#smallVideoTag');
+let dataChannel;
 
 io.on('signal', async function(data) {
     if (data.user_type === 'expert' && data.command === 'joinroom') {
@@ -49,11 +49,7 @@ io.on('signal', async function(data) {
         document.querySelector('#videoPage').style.display = 'block';
     }
     else if (data.user_type == 'signaling') {
-        // if (!rtcPeerConn) {
-        //     console.log('peer in 2');
-        //     startSignaling();
-        // }
-        var message = JSON.parse(data.user_data);
+        let message = JSON.parse(data.user_data);
         try {
             if (message.sdp) {
                 if (message.sdp.type === 'offer' && myUserType === 'expert') {
@@ -182,16 +178,16 @@ function receiveDataChannelMessage(evt) {
         console.log('receivedFileSize: ' + receivedFileSize);
 
         if (fileSize === receivedFileSize) {
-            var received = new window.Blob(fileBuffer);
+            let received = new window.Blob(fileBuffer);
             fileBuffer = [];
             fileSize = 0;
             fileTransferring = false;
-            var linkTag = document.createElement('a');
+            let linkTag = document.createElement('a');
             console.log(received);
             linkTag.href = URL.createObjectURL(received);
             linkTag.download = receivedFileName;
             linkTag.appendChild(document.createTextNode(receivedFileName));
-            var div = document.createElement('div');
+            let div = document.createElement('div');
             div.className = 'message-out';
             div.appendChild(linkTag);
             messageHolder.appendChild(div);
@@ -211,7 +207,7 @@ sendMessage.addEventListener('click', function(evt) {
 });
 
 function appendChatMessage(msg, className) {
-    var div = document.createElement('div');
+    let div = document.createElement('div');
     div.className = className;
     div.innerHTML = '<span>' + msg + '</span>';
     messageHolder.appendChild(div);
@@ -249,7 +245,7 @@ sendFile.addEventListener('change', function() {
                 fileProgress.value = offset + e.target.result.byteLength;
             };
         })(file);
-        var slice = file.slice(offset, offset + chunkSize);
+        let slice = file.slice(offset, offset + chunkSize);
         reader.readAsArrayBuffer(slice);
     };
     sliceFile(0);
@@ -257,14 +253,14 @@ sendFile.addEventListener('change', function() {
 });
 
 /* muting and pausing video */
-var muteMyself = document.querySelector('#muteMyself');
-var pauseMyVideo = document.querySelector('#pauseMyVideo');
+const muteMyself = document.querySelector('#muteMyself');
+const pauseMyVideo = document.querySelector('#pauseMyVideo');
 
 muteMyself.addEventListener('click', function(evt) {
     console.log('muting/unmuting myself');
-    var streams = rtcPeerConn.getLocalStreams();
-    for (var stream of streams) {
-        for (var audioTrack of stream.getAudioTracks()) {
+    let streams = rtcPeerConn.getLocalStreams();
+    for (let stream of streams) {
+        for (let audioTrack of stream.getAudioTracks()) {
             if (audioTrack.enabled) {
                 muteMyself.innerHTML = 'Unmute'
             } else {
@@ -279,9 +275,9 @@ muteMyself.addEventListener('click', function(evt) {
 
 pauseMyVideo.addEventListener('click', function(evt) {
     console.log('pausing/unpausing my video');
-    var streams = rtcPeerConn.getLocalStreams();
-    for (var stream of streams) {
-        for (var videoTrack of stream.getVideoTracks()) {
+    let streams = rtcPeerConn.getLocalStreams();
+    for (let stream of streams) {
+        for (let videoTrack of stream.getVideoTracks()) {
             if (videoTrack.enabled) {
                 pauseMyVideo.innerHTML = 'Start Video'
             } else {
@@ -295,14 +291,14 @@ pauseMyVideo.addEventListener('click', function(evt) {
 });
 
 /* screen sharing */
-var shareMyScreen = document.querySelector('#shareMyScreen');
+const shareMyScreen = document.querySelector('#shareMyScreen');
 shareMyScreen.addEventListener('click', function(evt) {
     shareScreenText = 'Share Screen';
     stopShareScreenText = 'Stop Sharing';
     console.log('Screen share button text: ' + shareMyScreen.innerHTML);
 
-    if (shareMyScreen.innerHTML == shareScreenText) {
-        var msg = 'Sharing my screen...';
+    if (shareMyScreen.innerHTML === shareScreenText) {
+        let msg = 'Sharing my screen...';
         appendChatMessage(msg, 'message-in');
         getScreenMedia(function(err, stream) {
             if (err) {

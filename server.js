@@ -20,12 +20,12 @@ app.io.route('signal', function(req) {
         user_name: req.data.user_name,
         user_data: req.data.user_data,
         command: req.data.command
-    })
-})
+    });
+});
 
 app.io.route('files', function(req) {
     req.io.room('files').broadcast('files', {
         filename: req.data.filename,
         filesize: req.data.filesize
     });
-})
+});
