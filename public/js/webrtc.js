@@ -60,9 +60,9 @@ io.on('signal', async function(data) {
                     console.log('Unsupported SDP type.');
                 }
             } else if (message.candidate) {
-                console.log('b: ', message.candidate);
-                // await setTimeout(() => rtcPeerConn.addIceCandidate(new RTCIceCandidate(message.candidate)).catch((err) => console.log(err)), 5000);
-                await rtcPeerConn.addIceCandidate(new RTCIceCandidate(message.candidate)).catch((err) => console.log(err));
+                await setTimeout(() => {
+                    rtcPeerConn.addIceCandidate(new RTCIceCandidate(message.candidate)).catch((err) => console.log(err))
+                }, 500);
             }
         } catch (err) {
             console.log('SDP error :' + err);
@@ -101,7 +101,6 @@ function startSignaling() {
     rtcPeerConn.onicecandidate = function(evt) {
         called = true;
         if (evt.candidate) {
-            console.log('a:', evt.candidate);
             io.emit('signal', {
                 user_type: 'signaling',
                 command: 'icecandidate',
