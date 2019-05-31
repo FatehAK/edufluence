@@ -101,6 +101,7 @@ function startSignaling() {
     rtcPeerConn.ondatachannel = function(evt) {
         console.log('Receiving a data channel');
         dataChannel = evt.channel;
+        console.log(evt);
         dataChannel.onmessage = receiveDataChannelMessage;
     };
     rtcPeerConn.onicecandidate = function(evt) {
@@ -173,6 +174,7 @@ function receiveDataChannelMessage(evt) {
             fileProgress.value = fileSize;
             console.log('fileSize: ' + fileSize);
             console.log('receivedFileSize: ' + receivedFileSize);
+
             if (fileSize === receivedFileSize) {
                 var received = new window.Blob(fileBuffer);
                 fileBuffer = [];
@@ -238,7 +240,8 @@ sendFile.addEventListener('change', function() {
         appendChatMessage("sending " + file.name, 'message-in');
         fileTransferring = true;
         fileProgress.max = file.size;
-        var chunkSize = 16384;
+        // var chunkSize = 16384;
+        var chunkSize = 1200;
         let res = 0;
         var sliceFile = function(offset) {
             var reader = new window.FileReader();
@@ -248,7 +251,7 @@ sendFile.addEventListener('change', function() {
                     console.log('res: ' + res);
                     dataChannel.send(e.target.result);
                     if (file.size > offset + e.target.result.byteLength) {
-                        window.setTimeout(sliceFile, 2000, offset + chunkSize);
+                        window.setTimeout(sliceFile, 0, offset + chunkSize);
                     }
                     fileProgress.value = offset + e.target.result.byteLength;
                 };
