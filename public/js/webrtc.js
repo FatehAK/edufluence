@@ -8,16 +8,16 @@ var configuration = {
         {
             urls: 'stun:stun.l.google.com:19302',
         },
-        // {
-        //     urls: 'turn:13.250.13.83:3478?transport=udp',
-        //     username: 'YzYNCouZM1mhqhmseWk6',
-        //     credential: 'YzYNCouZM1mhqhmseWk6'
-        // },
-        // {
-        //     urls: 'turn:numb.viagenie.ca',
-        //     username: 'nyt3fyre@gmail.com',
-        //     credential: 'fyrexfyre'
-        // }
+        {
+            urls: 'turn:numb.viagenie.ca',
+            username: 'nyt3fyre@gmail.com',
+            credential: 'fyrexfyre'
+        },
+        {
+            urls: 'turn:13.250.13.83:3478?transport=udp',
+            username: 'YzYNCouZM1mhqhmseWk6',
+            credential: 'YzYNCouZM1mhqhmseWk6'
+        }
     ]
 };
 var rtcPeerConn;
