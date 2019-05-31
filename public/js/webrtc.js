@@ -168,13 +168,12 @@ let countt = 0;
 
 function receiveDataChannelMessage(evt) {
     // console.log('From DataChannel: ' + evt.data);
-    console.log('out' + evt.data.byteLength);
     try {
         if (fileTransferring) {
             countt++;
             console.log(countt);
             fileBuffer.push(evt.data);
-            console.log('in:' + evt.data.byteLength);
+            console.log('length:' + evt.data.byteLength);
             fileSize += evt.data.byteLength;
             fileProgress.value = fileSize;
             console.log('fileSize: ' + fileSize);
@@ -249,14 +248,14 @@ sendFile.addEventListener('change', function() {
         let res = 0;
         let count = 0;
         var sliceFile = function(offset) {
-            var reader = new window.FileReader();
+            var reader = new FileReader();
             reader.onload = (function() {
                 return function(e) {
                     res += e.target.result.byteLength;
                     console.log('res: ' + res);
-                    dataChannel.send(e.target.result);
+                    setTimeout(() => dataChannel.send(e.target.result), 1000);
                     if (file.size > offset + e.target.result.byteLength) {
-                        window.setTimeout(sliceFile, 0, offset + chunkSize);
+                        setTimeout(sliceFile, 0, offset + chunkSize);
                     }
                     fileProgress.value = offset + e.target.result.byteLength;
                 };
