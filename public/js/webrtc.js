@@ -239,12 +239,13 @@ sendFile.addEventListener('change', function() {
         fileTransferring = true;
         fileProgress.max = file.size;
         var chunkSize = 16384;
-
+        let res = 0;
         var sliceFile = function(offset) {
             var reader = new window.FileReader();
             reader.onload = (function() {
                 return function(e) {
-                    console.log('e.target' + e.target.result.byteLength);
+                    res += e.target.result.byteLength;
+                    console.log('res: ' + res);
                     dataChannel.send(e.target.result);
                     if (file.size > offset + e.target.result.byteLength) {
                         window.setTimeout(sliceFile, 0, offset + chunkSize);
