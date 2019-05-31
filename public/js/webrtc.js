@@ -84,14 +84,11 @@ function startSignaling() {
             rtcPeerConn = new webkitRTCPeerConnection(configuration);
         }
     }
-    // dataChannel = rtcPeerConn.createDataChannel('textMessages', dataChannelOptions);
+
+    //our data channel
     dataChannel = rtcPeerConn.createDataChannel('mychannel');
     dataChannel.binaryType = 'arraybuffer';
-    console.log(dataChannel);
 
-    dataChannel.onerror = (error) => {
-        console.log("Data Channel Error:", error);
-    };
     dataChannel.onopen = function() {
         if (dataChannel.readyState === 'open') {
             console.log('Data Channel open');
@@ -106,12 +103,13 @@ function startSignaling() {
     };
     rtcPeerConn.onicecandidate = function(evt) {
         called = true;
-        if (evt.candidate)
+        if (evt.candidate) {
             io.emit('signal', {
                 user_type: 'signaling',
                 command: 'icecandidate',
                 user_data: JSON.stringify({ candidate: evt.candidate })
             });
+        }
     };
 
     let negotiating;
@@ -156,53 +154,43 @@ function startSignaling() {
 }
 
 /* messaging and file transfer */
-var messageHolder = document.querySelector('#messageHolder');
-var myMessage = document.querySelector('#myMessage');
-var sendMessage = document.querySelector('#sendMessage');
-var receivedFileName;
-var receivedFileSize;
-var fileBuffer = [];
-var fileSize = 0;
-var fileTransferring = false;
-let countt = 0;
+const messageHolder = document.querySelector('#messageHolder');
+const myMessage = document.querySelector('#myMessage');
+const sendMessage = document.querySelector('#sendMessage');
+const fileProgress = document.querySelector('#fileProgress');
+let receivedFileName;
+let receivedFileSize;
+let fileBuffer = [];
+let fileSize = 0;
+let fileTransferring = false;
 
 function receiveDataChannelMessage(evt) {
-    // console.log('From DataChannel: ' + evt.data);
-    try {
-        if (fileTransferring) {
-            countt++;
-            console.log(countt);
-            fileBuffer.push(evt.data);
-            console.log('length:' + evt.data.byteLength);
-            fileSize += evt.data.byteLength;
-            fileProgress.value = fileSize;
-            console.log('fileSize: ' + fileSize);
-            console.log('receivedFileSize: ' + receivedFileSize);
+    if (fileTransferring) {
+        fileBuffer.push(evt.data);
+        fileSize += evt.data.byteLength;
+        fileProgress.value = fileSize;
+        console.log('fileSize: ' + fileSize);
+        console.log('receivedFileSize: ' + receivedFileSize);
 
-            if (fileSize === receivedFileSize) {
-                var received = new window.Blob(fileBuffer);
-                fileBuffer = [];
-                downloadLink.href = URL.createObjectURL(received);
-                downloadLink.download = receivedFileName;
-                downloadLink.appendChild(document.createTextNode(receivedFileName + '(' + fileSize + ') bytes'));
-                fileTransferring = false;
-                var linkTag = document.createElement('a');
-                console.log(received);
-                linkTag.href = URL.createObjectURL(received);
-                linkTag.download = receivedFileName;
-                linkTag.appendChild(document.createTextNode(receivedFileName));
-                var div = document.createElement('div');
-                div.className = 'message-out';
-                div.appendChild(linkTag);
-                messageHolder.appendChild(div);
-            }
+        if (fileSize === receivedFileSize) {
+            var received = new window.Blob(fileBuffer);
+            fileBuffer = [];
+            fileSize = 0;
+            fileTransferring = false;
+            var linkTag = document.createElement('a');
+            console.log(received);
+            linkTag.href = URL.createObjectURL(received);
+            linkTag.download = receivedFileName;
+            linkTag.appendChild(document.createTextNode(receivedFileName));
+            var div = document.createElement('div');
+            div.className = 'message-out';
+            div.appendChild(linkTag);
+            messageHolder.appendChild(div);
         }
-        else {
-            console.log('messaging');
-            appendChatMessage(evt.data, 'message-out');
-        }
-    } catch (err) {
-        console.log(err);
+    }
+    else {
+        console.log('messaging');
+        appendChatMessage(evt.data, 'message-out');
     }
 }
 
@@ -220,11 +208,6 @@ function appendChatMessage(msg, className) {
     messageHolder.appendChild(div);
 }
 
-/* file transfer */
-var sendFile = document.querySelector('#sendFile');
-var fileProgress = document.querySelector('#fileProgress');
-var downloadLink = document.querySelector('#receivedFileLink');
-
 io.on('files', function(data) {
     receivedFileName = data.filename;
     receivedFileSize = data.filesize;
@@ -232,45 +215,35 @@ io.on('files', function(data) {
     fileTransferring = true;
 });
 
+//send file dialog and chunking
+const sendFile = document.querySelector('#sendFile');
 sendFile.addEventListener('change', function() {
-    try {
-        var file = sendFile.files[0];
-        console.log('sending file ' + file.name + ' (' + file.size + ') ...');
-        io.emit('files', {
-            filename: file.name,
-            filesize: file.size
-        });
-
-        appendChatMessage("sending " + file.name, 'message-in');
-        fileTransferring = true;
-        fileProgress.max = file.size;
-        var chunkSize = 16384;
-        let res = 0;
-        let count = 0;
-        var sliceFile = function(offset) {
-            var reader = new FileReader();
-            reader.onload = (function() {
-                return function(e) {
-                    res += e.target.result.byteLength;
-                    console.log('res: ' + res);
-                    setTimeout(() => dataChannel.send(e.target.result), 1000);
-                    if (file.size > offset + e.target.result.byteLength) {
-                        setTimeout(sliceFile, 0, offset + chunkSize);
-                    }
-                    fileProgress.value = offset + e.target.result.byteLength;
-                };
-            })(file);
-            count++;
-            var slice = file.slice(offset, offset + chunkSize);
-            console.log(slice);
-            reader.readAsArrayBuffer(slice);
-            console.log(count);
-        };
-        sliceFile(0);
-        fileTransferring = false;
-    } catch (err) {
-        console.log(err);
-    }
+    let file = sendFile.files[0];
+    console.log('sending file ' + file.name + ' (' + file.size + ') ...');
+    io.emit('files', {
+        filename: file.name,
+        filesize: file.size
+    });
+    appendChatMessage("sending " + file.name, 'message-in');
+    fileTransferring = true;
+    fileProgress.max = file.size;
+    let chunkSize = 16384;
+    let sliceFile = function(offset) {
+        let reader = new FileReader();
+        reader.onload = (function() {
+            return function(e) {
+                setTimeout(() => dataChannel.send(e.target.result), 1000);
+                if (file.size > offset + e.target.result.byteLength) {
+                    setTimeout(sliceFile, 0, offset + chunkSize);
+                }
+                fileProgress.value = offset + e.target.result.byteLength;
+            };
+        })(file);
+        var slice = file.slice(offset, offset + chunkSize);
+        reader.readAsArrayBuffer(slice);
+    };
+    sliceFile(0);
+    fileTransferring = false;
 });
 
 /* muting and pausing video */
