@@ -11,10 +11,6 @@ var configuration = {
 var rtcPeerConn;
 var mainVideoArea = document.querySelector('#mainVideoTag');
 var smallVideoArea = document.querySelector('#smallVideoTag');
-// var dataChannelOptions = {
-//     ordered: false,
-//     maxPacketLifeTime: 1000,
-// };
 var dataChannel;
 
 io.on('signal', async function(data) {
@@ -64,7 +60,9 @@ io.on('signal', async function(data) {
                     console.log('Unsupported SDP type.');
                 }
             } else if (message.candidate) {
-                await setTimeout(() => rtcPeerConn.addIceCandidate(new RTCIceCandidate(message.candidate)).catch((err) => console.log(err)), 5000);
+                console.log('b: ', message.candidate);
+                // await setTimeout(() => rtcPeerConn.addIceCandidate(new RTCIceCandidate(message.candidate)).catch((err) => console.log(err)), 5000);
+                await rtcPeerConn.addIceCandidate(new RTCIceCandidate(message.candidate)).catch((err) => console.log(err));
             }
         } catch (err) {
             console.log('SDP error :' + err);
@@ -98,12 +96,12 @@ function startSignaling() {
     rtcPeerConn.ondatachannel = function(evt) {
         console.log('Receiving a data channel');
         dataChannel = evt.channel;
-        console.log(evt);
         dataChannel.onmessage = receiveDataChannelMessage;
     };
     rtcPeerConn.onicecandidate = function(evt) {
         called = true;
         if (evt.candidate) {
+            console.log('a:', evt.candidate);
             io.emit('signal', {
                 user_type: 'signaling',
                 command: 'icecandidate',
@@ -189,7 +187,7 @@ function receiveDataChannelMessage(evt) {
         }
     }
     else {
-        console.log('messaging');
+        //messaging
         appendChatMessage(evt.data, 'message-out');
     }
 }
@@ -232,6 +230,7 @@ sendFile.addEventListener('change', function() {
         let reader = new FileReader();
         reader.onload = (function() {
             return function(e) {
+                //delay sending by 1 sec
                 setTimeout(() => dataChannel.send(e.target.result), 1000);
                 if (file.size > offset + e.target.result.byteLength) {
                     setTimeout(sliceFile, 0, offset + chunkSize);
