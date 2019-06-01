@@ -1,51 +1,34 @@
+//divs
 const landingPageDiv = document.querySelector('#landingPage');
 const studentEntryDiv = document.querySelector('#studentEntry');
 const expertSignupDiv = document.querySelector('#expertSignup');
 const videoPageDiv = document.querySelector('#videoPage');
+const requestExpertForm = document.querySelector('#requestExpertForm');
+const waitingForExpert = document.querySelector('#waitingForExpert');
+const expertSignupForm = document.querySelector('#expertSignupForm');
+const waitingForStudent = document.querySelector('#waitingForStudent');
+const expertListing = document.querySelector('#expertListing');
+const studentRegister = document.querySelector('#studentRegister');
 
+//form values
 const studentName = document.querySelector('#studentName');
 const studentPass = document.querySelector('#studentPass');
 const expertName = document.querySelector('#expertName');
 const expertPass = document.querySelector('#expertPass');
-const enterAsStudent = document.querySelector('#enterAsStudent');
-const requestExpert = document.querySelector('#requestExpert');
-const requestExpertForm = document.querySelector('#requestExpertForm');
-const waitingForExpert = document.querySelector('#waitingForExpert');
-const expertSignupForm = document.querySelector('#expertSignupForm');
-const expertSignupButton = document.querySelector('#expertSignupButton');
-const waitingForStudent = document.querySelector('#waitingForStudent');
-const expertListing = document.querySelector('#expertListing');
-const callExpert = document.querySelector('#callExpert');
-const enterAsExpert = document.querySelector('#enterAsExpert');
-const studentRegister = document.querySelector('#studentRegister');
-
-const toggleHelp = document.querySelector('#toggleHelp');
-const helpInfo = document.querySelector('#helpInfo');
-const toggleAbout = document.querySelector('#toggleAbout');
-const aboutInfo = document.querySelector('#aboutInfo');
-const toggleContact = document.querySelector('#toggleContact');
-const contactInfo = document.querySelector('#contactInfo');
-const toggleHome = document.querySelector('#toggleHome');
-
 const usName = document.querySelector('#usName');
 const usPass = document.querySelector('#usPass');
-const usMail = document.querySelector('#usMail');
-const usColl = document.querySelector('#usColl');
-const usDept = document.querySelector('#usDept');
-
+const usSpl = document.querySelector('#usSpl');
 const ueName = document.querySelector('#ueName');
 const uePass = document.querySelector('#uePass');
-const ueMail = document.querySelector('#ueMail');
-const ueColl = document.querySelector('#ueColl');
 const ueSpl = document.querySelector('#ueSpl');
 
 //student button
+const enterAsStudent = document.querySelector('#enterAsStudent');
 enterAsStudent.addEventListener('click', function(evt) {
     studentName.value = '';
     studentPass.value = '';
     myUserType = 'student';
     landingPageDiv.style.display = 'none';
-    helpInfo.style.display = 'none';
     studentEntryDiv.style.display = 'block';
     expertSignupDiv.style.display = 'none';
     videoPageDiv.style.display = 'none';
@@ -57,32 +40,60 @@ enterAsStudent.addEventListener('click', function(evt) {
 });
 
 //expert button
+const enterAsExpert = document.querySelector('#enterAsExpert');
 enterAsExpert.addEventListener('click', function(evt) {
     expertName.value = '';
     expertPass.value = '';
+    myUserType = 'expert';
     landingPageDiv.style.display = 'none';
     studentEntryDiv.style.display = 'none';
     expertSignupDiv.style.display = 'block';
     videoPageDiv.style.display = 'none';
-    myUserType = 'expert';
     expertSignupForm.style.display = 'block';
     waitingForStudent.style.display = 'none';
     expertRegister.style.display = 'none';
     evt.preventDefault();
 });
 
+//student register button
+sRegister.addEventListener('click', function(evt) {
+    usName.value = '';
+    usPass.value = '';
+    usSpl.value = '';
+    studentName.value = '';
+    studentPass.value = '';
+    requestExpertForm.style.display = 'none';
+    waitingForExpert.style.display = 'none';
+    studentRegister.style.display = 'block';
+    evt.preventDefault();
+});
+
+//expert register button
+eRegister.addEventListener('click', function(evt) {
+    ueName.value = '';
+    uePass.value = '';
+    ueSpl.value = '';
+    expertName.value = '';
+    expertPass.value = '';
+    expertSignupForm.style.display = 'none';
+    waitingForStudent.style.display = 'none';
+    expertRegister.style.display = 'block';
+    evt.preventDefault();
+});
+
+//database
 const request = window.indexedDB.open("mydb", 1);
-// Create schema
 request.onupgradeneeded = event => {
     const db = event.target.result;
-    const studentStore = db.createObjectStore("studentstore", { autoIncrement: true });
-    const expertStore = db.createObjectStore("expertstore", { autoIncrement: true });
+    db.createObjectStore("studentstore", { autoIncrement: true });
+    db.createObjectStore("expertstore", { autoIncrement: true });
 };
 
 request.onsuccess = () => {
     const db = request.result;
 
     //student registration
+    const ssRegister = document.querySelector('#ssRegister');
     ssRegister.addEventListener('click', function(evt) {
         const transaction = db.transaction(['studentstore'], 'readwrite');
         const studentStore = transaction.objectStore('studentstore');
@@ -119,6 +130,7 @@ request.onsuccess = () => {
     });
 
     //expert registration
+    const eeRegister = document.querySelector('#eeRegister');
     eeRegister.addEventListener('click', function(evt) {
         const transaction = db.transaction(['expertstore'], 'readwrite');
         const expertStore = transaction.objectStore('expertstore');
@@ -155,6 +167,7 @@ request.onsuccess = () => {
     });
 
     //student request
+    const requestExpert = document.querySelector('#requestExpert');
     requestExpert.addEventListener('click', function(evt) {
         const transaction = db.transaction(['studentstore'], 'readwrite');
         const studentStore = transaction.objectStore('studentstore');
@@ -194,6 +207,7 @@ request.onsuccess = () => {
     });
 
     //expert request
+    const expertSignupButton = document.querySelector('#expertSignupButton');
     expertSignupButton.addEventListener('click', function(evt) {
         const transaction = db.transaction(['expertstore'], 'readwrite');
         const expertStore = transaction.objectStore('expertstore');
@@ -232,37 +246,8 @@ request.onsuccess = () => {
     });
 }
 
-//student register button
-sRegister.addEventListener('click', function(evt) {
-    usName.value = '';
-    usPass.value = '';
-    usColl.value = '';
-    usMail.value = '';
-    usDept.value = '';
-    studentName.value = '';
-    studentPass.value = '';
-    requestExpertForm.style.display = 'none';
-    waitingForExpert.style.display = 'none';
-    studentRegister.style.display = 'block';
-    evt.preventDefault();
-});
-
-//expert register button
-eRegister.addEventListener('click', function(evt) {
-    ueName.value = '';
-    uePass.value = '';
-    ueMail.value = '';
-    ueColl.value = '';
-    ueSpl.value = '';
-    expertName.value = '';
-    expertPass.value = '';
-    expertSignupForm.style.display = 'none';
-    waitingForStudent.style.display = 'none';
-    expertRegister.style.display = 'block';
-    evt.preventDefault();
-});
-
 //call expert button
+const callExpert = document.querySelector('#callExpert');
 callExpert.addEventListener('click', function(evt) {
     landingPageDiv.style.display = 'none';
     studentEntryDiv.style.display = 'none';
@@ -276,60 +261,4 @@ callExpert.addEventListener('click', function(evt) {
     });
     console.log('student ' + studentUserName + ' is calling.');
     evt.preventDefault();
-});
-
-toggleHome.addEventListener('click', function() {
-    landingPageDiv.style.display = 'block';
-    helpInfo.style.display = 'none';
-    aboutInfo.style.display = 'none';
-    contactInfo.style.display = 'none';
-    requestExpertForm.style.display = 'none';
-    waitingForExpert.style.display = 'none';
-    expertListing.style.display = 'none';
-    studentRegister.style.display = 'none';
-    studentEntryDiv.style.display = 'none';
-    expertSignupDiv.style.display = 'none';
-    videoPageDiv.style.display = 'none';
-});
-
-toggleHelp.addEventListener('click', function() {
-    landingPageDiv.style.display = 'none';
-    helpInfo.style.display = 'block';
-    aboutInfo.style.display = 'none';
-    contactInfo.style.display = 'none';
-    requestExpertForm.style.display = 'none';
-    waitingForExpert.style.display = 'none';
-    expertListing.style.display = 'none';
-    studentRegister.style.display = 'none';
-    studentEntryDiv.style.display = 'none';
-    expertSignupDiv.style.display = 'none';
-    videoPageDiv.style.display = 'none';
-});
-
-toggleAbout.addEventListener('click', function() {
-    landingPageDiv.style.display = 'none';
-    aboutInfo.style.display = 'block';
-    helpInfo.style.display = 'none';
-    contactInfo.style.display = 'none';
-    requestExpertForm.style.display = 'none';
-    waitingForExpert.style.display = 'none';
-    expertListing.style.display = 'none';
-    studentRegister.style.display = 'none';
-    studentEntryDiv.style.display = 'none';
-    expertSignupDiv.style.display = 'none';
-    videoPageDiv.style.display = 'none';
-});
-
-toggleContact.addEventListener('click', function() {
-    landingPageDiv.style.display = 'none';
-    aboutInfo.style.display = 'none';
-    helpInfo.style.display = 'none';
-    contactInfo.style.display = 'block';
-    requestExpertForm.style.display = 'none';
-    waitingForExpert.style.display = 'none';
-    expertListing.style.display = 'none';
-    studentRegister.style.display = 'none';
-    studentEntryDiv.style.display = 'none';
-    expertSignupDiv.style.display = 'none';
-    videoPageDiv.style.display = 'none';
 });
