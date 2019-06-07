@@ -29,8 +29,8 @@ io.on('signal', async function(data) {
     if (data.user_type === 'expert' && data.command === 'joinroom') {
         if (myUserType === 'student') {
             theirName = data.user_name;
-            document.querySelector('#messageOutName').textContent = theirName;
-            document.querySelector('#messageInName').textContent = myName;
+            document.querySelector('#messageOutName').innerHTML = '<i class="fas fa-chalkboard-teacher"></i>' + theirName;
+            document.querySelector('#messageInName').innerHTML = '<i class="fas fa-user-graduate"></i>' + myName;
         }
         document.querySelector('#requestExpertForm').style.display = 'none';
         document.querySelector('#waitingForExpert').style.display = 'none';
@@ -42,10 +42,12 @@ io.on('signal', async function(data) {
         }
         if (myUserType === 'expert') {
             theirName = data.user_name;
-            document.querySelector('#messageOutName').textContent = theirName;
-            document.querySelector('#messageInName').textContent = myName;
+            document.querySelector('#messageOutName').innerHTML = '<i class="fas fa-user-graduate"></i>' + theirName;
+            document.querySelector('#messageInName').innerHTML = '<i class="fas fa-chalkboard-teacher"></i>' + myName;
         }
         document.querySelector('#expertSignup').style.display = 'none';
+        document.querySelector('.head-wrapper').style.display = 'none';
+        document.querySelector('.footer').style.display = 'none';
         document.querySelector('#videoPage').style.display = 'block';
     }
     else if (data.user_type == 'signaling') {
@@ -65,7 +67,6 @@ io.on('signal', async function(data) {
                     console.log('answering');
                     await rtcPeerConn.setRemoteDescription(new RTCSessionDescription(message.sdp)).catch((err) => console.log(err));
                 } else {
-                    console.log('Unsupported SDP type.');
                 }
             } else if (message.candidate) {
                 await setTimeout(() => {
@@ -80,7 +81,7 @@ io.on('signal', async function(data) {
 
 //on negotiation called
 function startSignaling() {
-    console.log('starting signaling...');
+    console.log('Starting signaling..');
     if (RTCPeerConnection) {
         //firefox
         rtcPeerConn = new RTCPeerConnection(configuration);
@@ -159,7 +160,7 @@ function startSignaling() {
 }
 
 /* messaging and file transfer */
-const messageHolder = document.querySelector('#messageHolder');
+const messageHolder = document.querySelector('.message-box');
 const myMessage = document.querySelector('#myMessage');
 const sendMessage = document.querySelector('#sendMessage');
 const fileProgress = document.querySelector('#fileProgress');
@@ -174,19 +175,21 @@ function receiveDataChannelMessage(evt) {
         fileBuffer.push(evt.data);
         fileSize += evt.data.byteLength;
         fileProgress.value = fileSize;
-        console.log('fileSize: ' + fileSize);
-        console.log('receivedFileSize: ' + receivedFileSize);
 
         if (fileSize === receivedFileSize) {
+            fileProgress.style.display = 'none';
+            document.querySelector('.sidenav').style.width = '300px';
+            document.querySelector('body').style.marginRight = '300px';
+            opened = true;
             let received = new window.Blob(fileBuffer);
             fileBuffer = [];
             fileSize = 0;
             fileTransferring = false;
             let linkTag = document.createElement('a');
-            console.log(received);
+            linkTag.className = 'file-url';
             linkTag.href = URL.createObjectURL(received);
             linkTag.download = receivedFileName;
-            linkTag.appendChild(document.createTextNode(receivedFileName));
+            linkTag.innerHTML = `<i class="fas fa-download"></i><span>${receivedFileName}</span>`;
             let div = document.createElement('div');
             div.className = 'message-out';
             div.appendChild(linkTag);
@@ -200,13 +203,18 @@ function receiveDataChannelMessage(evt) {
 }
 
 sendMessage.addEventListener('click', function(evt) {
-    dataChannel.send(myMessage.value);
-    appendChatMessage(myMessage.value, 'message-in');
-    myMessage.value = '';
+    if (myMessage.value) {
+        dataChannel.send(myMessage.value);
+        appendChatMessage(myMessage.value, 'message-in');
+        myMessage.value = '';
+    }
     evt.preventDefault();
 });
 
 function appendChatMessage(msg, className) {
+    document.querySelector('.sidenav').style.width = '300px';
+    document.querySelector('body').style.marginRight = '300px';
+    opened = true;
     let div = document.createElement('div');
     div.className = className;
     div.innerHTML = '<span>' + msg + '</span>';
@@ -229,7 +237,8 @@ sendFile.addEventListener('change', function() {
         filename: file.name,
         filesize: file.size
     });
-    appendChatMessage("sending " + file.name, 'message-in');
+    fileProgress.style.display = 'block';
+    appendChatMessage('<i class="fas fa-share share"></i> Sending ' + file.name, 'message-in');
     fileTransferring = true;
     fileProgress.max = file.size;
     let chunkSize = 16384;
@@ -257,48 +266,43 @@ const muteMyself = document.querySelector('#muteMyself');
 const pauseMyVideo = document.querySelector('#pauseMyVideo');
 
 muteMyself.addEventListener('click', function(evt) {
-    console.log('muting/unmuting myself');
     let streams = rtcPeerConn.getLocalStreams();
     for (let stream of streams) {
         for (let audioTrack of stream.getAudioTracks()) {
             if (audioTrack.enabled) {
-                muteMyself.innerHTML = 'Unmute'
+                muteMyself.innerHTML = '<i class="fas fa-microphone"></i>';
+                muteMyself.style.padding = '11px 18.4px 11px 18.4px';
             } else {
-                muteMyself.innerHTML = 'Mute Myself'
+                muteMyself.innerHTML = '<i class="fas fa-microphone-slash"></i>';
+                muteMyself.style.padding = '11px 13px 11px 13px';
             }
             audioTrack.enabled = !audioTrack.enabled;
         }
-        console.log('Local stream: ' + stream.id);
     }
-    evt.preventDefault();
 });
 
 pauseMyVideo.addEventListener('click', function(evt) {
-    console.log('pausing/unpausing my video');
     let streams = rtcPeerConn.getLocalStreams();
     for (let stream of streams) {
         for (let videoTrack of stream.getVideoTracks()) {
             if (videoTrack.enabled) {
-                pauseMyVideo.innerHTML = 'Start Video'
+                pauseMyVideo.innerHTML = '<i class="fas fa-play"></i>';
             } else {
-                pauseMyVideo.innerHTML = 'Pause Video'
+                pauseMyVideo.innerHTML = '<i class="fas fa-pause"></i>';
             }
             videoTrack.enabled = !videoTrack.enabled;
         }
-        console.log('Local stream: ' + stream.id);
     }
-    evt.preventDefault();
 });
 
 /* screen sharing */
 const shareMyScreen = document.querySelector('#shareMyScreen');
 shareMyScreen.addEventListener('click', function(evt) {
-    shareScreenText = 'Share Screen';
-    stopShareScreenText = 'Stop Sharing';
-    console.log('Screen share button text: ' + shareMyScreen.innerHTML);
+    shareScreenText = '<i class="fas fa-desktop"></i>';
+    stopShareScreenText = '<i class="fas fa-stop"></i>';
 
     if (shareMyScreen.innerHTML === shareScreenText) {
-        let msg = 'Sharing my screen...';
+        let msg = 'Sharing my screen..';
         appendChatMessage(msg, 'message-in');
         getScreenMedia(function(err, stream) {
             if (err) {
@@ -312,8 +316,8 @@ shareMyScreen.addEventListener('click', function(evt) {
             }
         });
         shareMyScreen.innerHTML = stopShareScreenText;
+        shareMyScreen.style.padding = '11px 17px 11px 17px';
     } else {
-        console.log('Resetting my stream to video...');
         let constraints = {
             audio: true,
             video: true
@@ -328,8 +332,7 @@ shareMyScreen.addEventListener('click', function(evt) {
             .catch(function(err) {
                 console.log(err);
             });
-
         shareMyScreen.innerHTML = shareScreenText;
+        shareMyScreen.style.padding = '11px 15px 11px 15px';
     }
-    evt.preventDefault();
 });

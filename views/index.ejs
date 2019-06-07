@@ -3,193 +3,156 @@
 
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="images/favicon.ico" />
-    <title>Edufluence</title>
-    <link href="https://fonts.googleapis.com/css?family=Raleway:700,400,300" rel="stylesheet" type="text/css">
-    <link href="css/font-awesome.min.css" rel="stylesheet">
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap-reboot.css">
+    <link rel="stylesheet prefetch" href="https://fonts.googleapis.com/css?family=Lato:300,400">
+    <link rel="stylesheet prefetch" href="https://fonts.googleapis.com/css?family=Comfortaa:400,500,600,700&display=swap">
+    <link rel="stylesheet prefetch" href="https://fonts.googleapis.com/css?family=Josefin+Sans&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
     <link href="css/styles.css" rel="stylesheet">
     <script src="/socket.io/socket.io.js"></script>
     <script src="js/getscreenmedia.bundle.js"></script>
+    <title>Edufluence</title>
 </head>
 
 <body>
-    <nav class="navbar navbar-fixed-top">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <a href="/"> <img src="images/weblogo.png" width="45px" height="50px" /></a>
-                <a href="/"> <img src="images/name.png" width="200px" height="50px" /></a>
-            </div>
-        </div>
-    </nav>
-
-    <div id="landingPage" class="mastHead landing-page">
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-8 col-xs-offset-2">
-                    <div class="starter-text">
-                        <h1 class="head-style"><strong>WebRTC</strong></h1>
-                        <br />
-                        <p class="subhead-style">Peer to Peer Learning</p>
-                    </div>
-                    <div class="starter-call-to-action">
-                        <a href="" id="enterAsStudent" class="call-group call-style">Student</a>
-                        <a href="" id="enterAsExpert" class="call-group call-style">Expert</a>
+    <div class="main-wrapper">
+        <div class="head-wrapper">
+            <div class="header-ctn animated slideInDown fast">
+                <div class="header-left">
+                    <img src="images/logo.svg" width="40px" height="40px" />
+                    <h1>edufluence</h1>
+                </div>
+                <div class="header-right">
+                    <a id="toggleAbout" href="">About</a>
+                    <a id="toggleHelp" href="">Help</a>
+                    <div id="toggleMenu">
+                        <span></span>
+                        <span></span>
+                        <span></span>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div id="studentEntry" class="mastHead" style="display: none;">
-        <div class="signin-to-app">
-            <h2>Welcome Student</h2>
-            <div id="requestExpertForm">
-                <p>Student Login</p>
-                <form class="form-inline" onsubmit="return false">
-                    <div class="form-group">
-                        <input type="text" id="studentName" class="input-styled form-control" style="color: #000;" placeholder="Username" required autofocus>
-                        <br /><br />
-                        <input type="password" id="studentPass" class="input-styled form-control" style="color: #000;" placeholder="Password"
-                            onkeydown="if (event.keyCode == 13)document.getElementById('requestExpert').click()" required autofocus>
-                        <br /><br /><br />
-                        <button id="requestExpert" class="input-styled">Request an Expert</button>
-                        <br />
-                        <button id="sRegister" class="input-styled">Register</button>
-                    </div>
-                </form>
+        <div id="landingPage" class="landing-page">
+            <div class="landing-text">
+                <h1>Simplified learning in real time</h1>
             </div>
-
-            <div id="waitingForExpert" class="loading-wrap" style="display: none;">
-                <span>Waiting for the expert to arrive..</span>
-                <div class="progress">
-                    <div id="waitingForExpertProgress" class="progress-bar progress-bar-success progress-bar-striped active" style="width: 100%"></div>
+            <div class="landing-sub-text">
+                <p>Are are you a?</p>
+                <div class="arrows animated rotateIn fast">
+                    <img class="left-arrow" src="images/arrow-left.png" width="45px" height="50px" />
+                    <img class="right-arrow" src="images/arrow-right.png" width="45px" height="50px" />
                 </div>
-            </div>
-
-            <div id="expertListing" class="expert-info" style="display: none;">
-                <div class="doc-img">
-                    <img src="images/expert.jpg">
+                <div class="landing-buttons">
+                    <button id="enterAsStudent">Student<i class="fas fa-user-graduate"></i></button>
+                    <button id="enterAsExpert">Expert<i class="fas fa-chalkboard-teacher"></i></button>
                 </div>
-                <div class="doc-text">
-                    <span class="name">The Expert will see you now</span>
-                    <span class="specialty"></span>
-                    <button id="callExpert" class="input-styled">Call the Expert</button>
-                </div>
-            </div>
-
-            <div id="studentRegister">
-                <p>Registration</p>
-                <form class="form-inline" onsubmit="return false">
-                    <div class="form-group">
-                        <input type="text" id="usName" class="input-styled form-control" style="color: #000;" placeholder="Username" required autofocus>
-                        <br /><br />
-                        <input type="password" id="usPass" class="input-styled form-control" style="color: #000;" placeholder="Password" required autofocus>
-                        <br /><br />
-                        <input type="text" id="usSpl" class="input-styled form-control" style="color: #000;" placeholder="What are you looking for?"
-                            onkeydown="if (event.keyCode == 13)document.getElementById('ssRegister').click()" required autofocus>
-                        <br /><br /><br />
-                        <button id="ssRegister" class="input-styled hov">Register</button>
-                    </div>
-                </form>
             </div>
         </div>
-    </div>
 
-    <div id="expertSignup" class="mastHead" style="display: none;">
-        <div class="signin-to-app signin-expert">
-            <h2>Welcome Expert</h2>
-            <div id="expertSignupForm">
-                <p>Expert Login</p>
-                <form class="form-inline">
-                    <div class="form-group" onsubmit="return false">
-                        <input type="text" id="expertName" class="input-styled form-control" style="color: #000;" placeholder="Username" required autofocus>
-                        <br /><br />
-                        <input type="password" id="expertPass" class="input-styled form-control" style="color: #000;" placeholder="Password"
-                            onkeydown="if (event.keyCode == 13)document.getElementById('expertSignupButton').click()" required autofocus>
-                        <br /><br /><br />
-                        <button id="expertSignupButton" class="input-styled">Wait for Student</button>
-                        <br />
-                        <button id="eRegister" class="input-styled">Register</button>
-                    </div>
-                </form>
-            </div>
-
-            <div id="waitingForStudent" class="loading-wrap" style="display: none;">
-                <span>Waiting for students to contact you..</span>
-                <div class="progress">
-                    <div class="progress-bar progress-bar-success progress-bar-striped active" style="width: 100%"></div>
+        <div id="studentEntry" class="user-entry-main animated slideInLeft faster" style="display: none">
+            <h3>Welcome <span id="userStudent">Student</span></h3>
+            <div id="requestExpertForm" class="user-sub">
+                <p><i class="fas fa-user-graduate"></i>Login</p>
+                <div class="user-sub-input">
+                    <input type="text" id="studentName" placeholder="Username" required autofocus>
+                    <input type="password" id="studentPass" placeholder="Password" required>
+                    <button id="requestExpert">Request an Expert</button>
+                    <div>New user? <button id="sRegister"><span>Register</span></button></div>
                 </div>
             </div>
-
-            <div id="expertRegister">
-                <p>Registration</p>
-                <form class="form-inline" onsubmit="return false">
-                    <div class="form-group">
-                        <input type="text" id="ueName" class="input-styled form-control" style="color: #000;" placeholder="Username" required autofocus>
-                        <br /><br />
-                        <input type="password" id="uePass" class="input-styled form-control" style="color: #000;" placeholder="Password" required autofocus>
-                        <br /><br />
-                        <input type="text" id="ueSpl" class="input-styled form-control" style="color: #000;" placeholder="Specialty"
-                            onkeydown="if (event.keyCode == 13)document.getElementById('eeRegister').click()" required autofocus>
-                        <br /><br /><br />
-                        <button id="eeRegister" class="input-styled hov">Register</button>
-                    </div>
-                </form>
+            <div id="studentRegister" class="user-sub" style="display: none">
+                <p><i class="fas fa-user-graduate"></i>Register</p>
+                <div class="user-sub-input">
+                    <input type="text" id="usName" placeholder="Username" required autofocus>
+                    <input type="password" id="usPass" placeholder="Password" required>
+                    <input type="text" id="usSpl" placeholder="What are you looking for?" required>
+                    <button id="ssRegister">Register</button>
+                </div>
+            </div>
+            <div id="waitingForExpert" class="user-waiting" style="display: none;">
+                <p>Waiting for the expert to arrive..</p>
+                <div class="meter">
+                    <span></span>
+                </div>
+            </div>
+            <div id="expertListing" class="expert-listing" style="display: none;">
+                <div class="expert-img">
+                    <img src="images/expert.jpg" width="290px" height="130px">
+                </div>
+                <div class="expert-info">
+                    <p>The Expert will see you now</p>
+                    <button id="callExpert">Call the Expert <i class="fas fa-phone animated infinite tada"></i></button>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div id="videoPage" class="mastHead" style="display: none;">
-        <div class="video-page-holder video-page-holder-horizontal">
-            <div class="left">
-                <div class="video-wrap">
-                    <div class="main-video">
-                        <video id="mainVideoTag" autoplay></video>
-                    </div>
-                    <div class="small-video">
-                        <video id="smallVideoTag" autoplay muted></video>
-                    </div>
+        <div id="expertSignup" class="user-entry-main animated slideInLeft faster" style="display: none">
+            <h3>Welcome <span id="userExpert">Expert</span></h3>
+            <div id="expertSignupForm" class="user-sub">
+                <p><i class="fas fa-chalkboard-teacher"></i>Login</p>
+                <div class="user-sub-input">
+                    <input type="text" id="expertName" placeholder="Username" required autofocus>
+                    <input type="password" id="expertPass" placeholder="Password" required>
+                    <button id="expertSignupButton">Wait for Student</button>
+                    <div>New user? <button id="eRegister"><span>Register</span></button></div>
                 </div>
-
-                <div class="actions-holder">
-                    <a id="muteMyself" class="input-styled" href="javascript:void(0)">Mute</a>
-                    <a id="pauseMyVideo" class="input-styled" href="javascript:void(0)">Pause Video</a>
-                    <a id="shareMyScreen" class="input-styled" href="javascript:void(0)">Share Screen</a><br />
-                </div>
-
-                <form class="send-file form-inline">
-                    <div class="form-group" style="margin: 0 auto;">
-                        <input type="file" id="sendFile" class="space-styled" />
-                        <progress id="fileProgress" value="1" max="100" class="progress-styled"></progress>
-                        <br />
-                        <a id="receivedFileLink"></a>
-                        <br />
-                    </div>
-                </form>
-
-                <form class="send-message form-inline" onsubmit="return false">
-                    <div class="form-group">
-                        <input type="text" id="myMessage" class="input-styled form-control" placeholder="Enter your message"
-                            onkeydown="if (event.keyCode == 13)document.getElementById('sendMessage').click()" autofocus>
-                        <button id="sendMessage" class="input-styled">Send Message</button>
-                    </div>
-                </form>
             </div>
-
-            <div class="right">
-                <div id="messageHolder" class="message-holder">
-                    <div id="messageInName" class="message-in"></div>
-                    <div id="messageOutName" class="message-out"></div>
+            <div id="expertRegister" class="user-sub" style="display: none">
+                <p><i class="fas fa-chalkboard-teacher"></i>Register</p>
+                <div class="user-sub-input">
+                    <input type="text" id="ueName" placeholder="Username" required autofocus>
+                    <input type="password" id="uePass" placeholder="Password" required>
+                    <input type="text" id="ueSpl" placeholder="What is your speciality?" required>
+                    <button id="eeRegister">Register</button>
+                </div>
+            </div>
+            <div id="waitingForStudent" class="user-waiting" style="display: none;">
+                <p>Waiting for students to contact you..</p>
+                <div class="meter">
+                    <span></span>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
+    <div id="videoPage" class="video-page" style="display: none">
+        <div class="main-video">
+            <video id="mainVideoTag" autoplay></video>
+            <video id="smallVideoTag" autoplay muted></video>
+        </div>
+        <div class="sidenav">
+            <a href="" class="close-nav"><i class="fas fa-times"></i></a>
+            <h4>Messages</h4>
+            <progress id="fileProgress" value="1" max="100" class="progress-styled"></progress>
+            <div class="message-box">
+                <div id="messageInName" class="message-in"></div>
+                <div id="messageOutName" class="message-out"></div>
+            </div>
+        </div>
+        <div class="nav-container">
+            <button class="open-nav" title="Message"><i class="fas fa-comment"></i></button>
+        </div>
+        <div class="message-form">
+            <input id="myMessage" placeholder="Enter your message" autofocus>
+            <button id="sendMessage">Send</button>
+        </div>
+        <div class="video-options">
+            <button id="muteMyself" class="mute-sound" title="Mute audio"><i class="fas fa-microphone-slash"></i></button>
+            <button id="pauseMyVideo" class="pause-video" title="Pause video"><i class="fas fa-pause"></i></button>
+            <label for="sendFile" class="file-share" title="Share files"><i class="fas fa-share"></i></label>
+            <input type="file" id="sendFile">
+            <button id="shareMyScreen" class="screen-share" title="Screen share"><i class="fas fa-desktop"></i></button>
+        </div>
+    </div>
+
+    <div class="footer">Crafted with <i class="fas fa-heart"></i> by Fateh</div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.11.7/dist/sweetalert2.all.min.js"></script>
     <script src="js/webrtc.js"></script>
     <script src="js/app.js"></script>
 </body>

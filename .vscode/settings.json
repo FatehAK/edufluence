@@ -17,9 +17,9 @@
         "**/.babelrc": true,
         "**/yarn.lock": true,
         "**/.gitignore": true,
-        "**/.editorconfig": true,
-        "public\\js/bootstrap.js": true,
-        "public\\js/bootstrap.min.js": true,
+        "**/.editorconfig": false,
+        "public\\js/bootstrap.js": false,
+        "public\\js/bootstrap.min.js": false,
         "public\\js/npm.js": false,
         "public\\js/getscreenmedia.bundle.js": false,
         "Procfile": true
