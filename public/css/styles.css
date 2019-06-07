@@ -637,13 +637,19 @@ a {
     box-shadow: 0 0 7px rgba(0, 0, 0, 0.1);
 }
 
-#smallVideoTag {
+.small-video-ctn {
     width: 160px;
     height: 120px;
     position: absolute;
     top: 10px;
     left: 10px;
     z-index: 10;
+    border-radius: 3px;
+}
+
+#smallVideoTag {
+    width: 100%;
+    height: auto;
     border-radius: 3px;
 }
 
@@ -882,7 +888,7 @@ a {
 }
 
 @media screen and (max-width: 1440px) {
-    #smallVideoTag {
+    .small-video-ctn {
         width: 140px;
         height: 105px;
         position: absolute;
@@ -894,7 +900,7 @@ a {
 }
 
 @media screen and (max-width: 500px) {
-    #smallVideoTag {
+    .small-video-ctn {
         width: 120px;
         height: 90px;
         position: absolute;
@@ -907,7 +913,7 @@ a {
 
 /* footer */
 .footer {
-    position: fixed;
+    position: absolute;
     bottom: 0;
     width: 100%;
     display: flex;
