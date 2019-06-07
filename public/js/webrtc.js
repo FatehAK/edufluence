@@ -47,7 +47,6 @@ io.on('signal', async function(data) {
         }
         document.querySelector('#expertSignup').style.display = 'none';
         document.querySelector('.head-wrapper').style.display = 'none';
-        document.querySelector('.footer').style.display = 'none';
         document.querySelector('#videoPage').style.display = 'block';
     }
     else if (data.user_type == 'signaling') {

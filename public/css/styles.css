@@ -243,6 +243,25 @@ a {
     margin: 0 0 0 10px;
 }
 
+/* footer */
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 -90px 10px -90px;
+    padding: 0;
+    font-size: 0.9em;
+    font-weight: 100;
+}
+
+.footer > i {
+    color: #f53f64;
+    margin: 0 5px;
+}
+
 /* media queries for landing page */
 @media screen and (max-width: 1440px) {
     .landing-page {
@@ -284,11 +303,19 @@ a {
         padding: 7px 17px;
         font-size: 1em;
     }
+
+    .footer {
+        margin: 0 -70px 10px -70px;
+    }
 }
 
 @media screen and (max-width: 1300px) {
     .landing-page {
         margin: 60px 50px;
+    }
+
+    .footer {
+        margin: 0 -50px 10px -50px;
     }
 }
 
@@ -308,6 +335,10 @@ a {
     .landing-sub-text {
         padding: 25px 0 30px 0;
     }
+
+    .footer {
+        margin: 0 -10px 10px -10px;
+    }
 }
 
 @media screen and (max-width: 480px) {
@@ -317,6 +348,10 @@ a {
 
     .landing-text > h1 {
         font-size: 2.25em;
+    }
+
+    .footer {
+        margin: 0 0 10px 0;
     }
 }
 
@@ -909,24 +944,6 @@ a {
         z-index: 10;
         border-radius: 3px;
     }
-}
-
-/* footer */
-.footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 0 10px 0;
-    font-size: 0.9em;
-    font-weight: 100;
-}
-
-.footer > i {
-    color: #f53f64;
-    margin: 0 5px;
 }
 
 /* static progress bar */

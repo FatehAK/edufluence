@@ -250,13 +250,11 @@ request.onsuccess = () => {
 
 //call expert button
 const header = document.querySelector('.head-wrapper');
-const footer = document.querySelector('.footer');
 const callExpert = document.querySelector('#callExpert');
 callExpert.addEventListener('click', function(evt) {
     landingPageDiv.style.display = 'none';
     studentEntryDiv.style.display = 'none';
     header.style.display = 'none';
-    footer.style.display = 'none';
     videoPageDiv.style.display = 'block';
     studentUserName = studentName.value || 'no name';
     io.emit('signal', {
