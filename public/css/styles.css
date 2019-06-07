@@ -936,8 +936,8 @@ a {
 
 @media screen and (max-width: 500px) {
     .small-video-ctn {
-        width: 120px;
-        height: 90px;
+        width: 100px;
+        height: 60px;
         position: absolute;
         top: 10px;
         left: 10px;
