@@ -10,3 +10,10 @@ WebRTC is a cutting edge serverless technology allows browsers(or peers) to talk
 * Direct messaging among the users.
 * File transfer in a peer to peer manner.
 * Screen sharing for a great learning experience.
+
+### Local Development
+To get started developing right away:
+
+* Install all project dependencies with `npm install`
+* Start the development server with `node server.js`
+* The dev server should be running at `localhost:3000`
