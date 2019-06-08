@@ -331,6 +331,7 @@ msgInput.addEventListener('keydown', debounce(function(evt) {
     }
 }, 500, true));
 
+//modals
 toggleAbout.addEventListener('click', function(evt) {
     Swal.fire({
         title: `<strong style="font-size: 1.15em; font-family: 'Josefin Sans', sans-serif;">About</strong>`,
@@ -347,7 +348,7 @@ toggleAbout.addEventListener('click', function(evt) {
             </ul>
         </p>
         `,
-        footer: `<i style="margin: 5px 7px 0 0;" class="fas fa-info-circle"></i><span>For screen sharing you must install this <a href="" target="_blank">extension</span>`
+        footer: `<i style="margin: 5px 7px 0 0;" class="fas fa-info-circle"></i><span>For screen sharing you must install this <a href="https://chrome.google.com/webstore/detail/edushare/pahmpnjhabkdbkbongmidpbielbcpggo" target="_blank">extension</span>`
     });
     evt.preventDefault();
 });
@@ -368,7 +369,7 @@ toggleHelp.addEventListener('click', function(evt) {
             </ol>
         </p>
         `,
-        footer: `<i style="margin: 5px 7px 0 0;" class="fas fa-info-circle"></i><span>For screen sharing you must install this <a href="" target="_blank">extension</span>`
+        footer: `<i style="margin: 5px 7px 0 0;" class="fas fa-info-circle"></i><span>For screen sharing you must install this <a href="https://chrome.google.com/webstore/detail/edushare/pahmpnjhabkdbkbongmidpbielbcpggo" target="_blank">extension</span>`
     });
     evt.preventDefault();
 });

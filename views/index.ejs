@@ -19,7 +19,9 @@
 </head>
 
 <body>
-    <div class="main-wrapper">
+    <div class="container">
+
+        <!-- header -->
         <div class="head-wrapper">
             <div class="header-ctn animated slideInDown fast">
                 <div class="header-left">
@@ -38,6 +40,7 @@
             </div>
         </div>
 
+        <!-- landing page -->
         <div id="landingPage" class="landing-page">
             <div class="landing-text">
                 <h1>Simplified learning in real time</h1>
@@ -56,6 +59,7 @@
             <div class="footer">Crafted with <i class="fas fa-heart"></i> by Fateh</div>
         </div>
 
+        <!-- student side -->
         <div id="studentEntry" class="user-entry-main animated slideInLeft faster" style="display: none">
             <h3>Welcome <span id="userStudent">Student</span></h3>
             <div id="requestExpertForm" class="user-sub">
@@ -93,6 +97,7 @@
             </div>
         </div>
 
+        <!-- expert side -->
         <div id="expertSignup" class="user-entry-main animated slideInLeft faster" style="display: none">
             <h3>Welcome <span id="userExpert">Expert</span></h3>
             <div id="expertSignupForm" class="user-sub">
@@ -120,38 +125,40 @@
                 </div>
             </div>
         </div>
-    </div>
 
-    <div id="videoPage" class="video-page" style="display: none">
-        <div class="main-video">
-            <video id="mainVideoTag" autoplay></video>
-            <div class="small-video-ctn">
-                <video id="smallVideoTag" autoplay muted></video>
+        <!-- video page -->
+        <div id="videoPage" class="video-page" style="display: none">
+            <div class="main-video">
+                <video id="mainVideoTag" autoplay></video>
+                <div class="small-video-ctn">
+                    <video id="smallVideoTag" autoplay muted></video>
+                </div>
+            </div>
+            <div class="sidenav">
+                <a href="" class="close-nav"><i class="fas fa-times"></i></a>
+                <h4>Messages</h4>
+                <progress id="fileProgress" value="1" max="100" class="progress-styled"></progress>
+                <div class="message-box">
+                    <div id="messageInName" class="message-in"></div>
+                    <div id="messageOutName" class="message-out"></div>
+                </div>
+            </div>
+            <div class="nav-container">
+                <button class="open-nav" title="Message"><i class="fas fa-comment"></i></button>
+            </div>
+            <div class="message-form">
+                <input id="myMessage" placeholder="Enter your message" autofocus>
+                <button id="sendMessage">Send</button>
+            </div>
+            <div class="video-options">
+                <button id="muteMyself" class="mute-sound" title="Mute audio"><i class="fas fa-microphone-slash"></i></button>
+                <button id="pauseMyVideo" class="pause-video" title="Pause video"><i class="fas fa-pause"></i></button>
+                <label for="sendFile" class="file-share" title="Share files"><i class="fas fa-share"></i></label>
+                <input type="file" id="sendFile">
+                <button id="shareMyScreen" class="screen-share" title="Screen share"><i class="fas fa-desktop"></i></button>
             </div>
         </div>
-        <div class="sidenav">
-            <a href="" class="close-nav"><i class="fas fa-times"></i></a>
-            <h4>Messages</h4>
-            <progress id="fileProgress" value="1" max="100" class="progress-styled"></progress>
-            <div class="message-box">
-                <div id="messageInName" class="message-in"></div>
-                <div id="messageOutName" class="message-out"></div>
-            </div>
-        </div>
-        <div class="nav-container">
-            <button class="open-nav" title="Message"><i class="fas fa-comment"></i></button>
-        </div>
-        <div class="message-form">
-            <input id="myMessage" placeholder="Enter your message" autofocus>
-            <button id="sendMessage">Send</button>
-        </div>
-        <div class="video-options">
-            <button id="muteMyself" class="mute-sound" title="Mute audio"><i class="fas fa-microphone-slash"></i></button>
-            <button id="pauseMyVideo" class="pause-video" title="Pause video"><i class="fas fa-pause"></i></button>
-            <label for="sendFile" class="file-share" title="Share files"><i class="fas fa-share"></i></label>
-            <input type="file" id="sendFile">
-            <button id="shareMyScreen" class="screen-share" title="Screen share"><i class="fas fa-desktop"></i></button>
-        </div>
+
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.11.7/dist/sweetalert2.all.min.js"></script>
     <script src="js/webrtc.js"></script>

@@ -264,7 +264,7 @@ sendFile.addEventListener('change', function() {
 const muteMyself = document.querySelector('#muteMyself');
 const pauseMyVideo = document.querySelector('#pauseMyVideo');
 
-muteMyself.addEventListener('click', function(evt) {
+muteMyself.addEventListener('click', function() {
     let streams = rtcPeerConn.getLocalStreams();
     for (let stream of streams) {
         for (let audioTrack of stream.getAudioTracks()) {
@@ -280,7 +280,7 @@ muteMyself.addEventListener('click', function(evt) {
     }
 });
 
-pauseMyVideo.addEventListener('click', function(evt) {
+pauseMyVideo.addEventListener('click', function() {
     let streams = rtcPeerConn.getLocalStreams();
     for (let stream of streams) {
         for (let videoTrack of stream.getVideoTracks()) {
@@ -296,7 +296,7 @@ pauseMyVideo.addEventListener('click', function(evt) {
 
 /* screen sharing */
 const shareMyScreen = document.querySelector('#shareMyScreen');
-shareMyScreen.addEventListener('click', function(evt) {
+shareMyScreen.addEventListener('click', function() {
     shareScreenText = '<i class="fas fa-desktop"></i>';
     stopShareScreenText = '<i class="fas fa-stop"></i>';
 
