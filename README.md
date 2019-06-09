@@ -6,7 +6,7 @@ Visit the site in action at - https://edufluence.herokuapp.com
 ### Tech Stack
 * HTML, CSS, Javascript (ES6)
 * Node.js Backend
-* Socket.io for signalling
+* Socket.io for signaling
 * Netlify for Web hosting
 
 ### Why WebRTC ?
