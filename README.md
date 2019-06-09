@@ -1,4 +1,4 @@
-## Edufluence
+# Edufluence
 Edufluence is a learning app that connects students and experts around the world. The primary goal is to help students acquire the necessary knowledge by consulting with the experts and using the real time browser technology **WebRTC** to simplify the process.
 
 Visit the site in action at - https://edufluence.herokuapp.com
