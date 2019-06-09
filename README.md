@@ -1,7 +1,13 @@
 ## Edufluence
-Edufluence is a learning app that connects students and experts around the world. The primary goal is to help students acquire the necessary knowledge by consulting with the experts by making use of the real time browser technology **WebRTC** to simplify the process.
+Edufluence is a learning app that connects students and experts around the world. The primary goal is to help students acquire the necessary knowledge by consulting with the experts and using the real time browser technology **WebRTC** to simplify the process.
 
 Visit the site in action at - https://edufluence.herokuapp.com
+
+### Tech Stack
+* HTML, CSS, Javascript(ES6)
+* Node.js Backend
+* Socket.io for signalling
+* Netlify for Web hosting
 
 ### Why WebRTC ?
 WebRTC is a cutting edge serverless technology allows browsers(or peers) to talk to each other and transmit data directly without the need for a centralized server, ensuring maximum security. WebRTC makes it possible to establish peer-to-peer connectivity to other web browsers easily. 
