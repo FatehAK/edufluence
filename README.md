@@ -4,7 +4,7 @@ Edufluence is a learning app that connects students and experts around the world
 Visit the site in action at - https://edufluence.herokuapp.com
 
 ### Tech Stack
-* HTML, CSS, Javascript(ES6)
+* HTML, CSS, Javascript (ES6)
 * Node.js Backend
 * Socket.io for signalling
 * Netlify for Web hosting
