@@ -15,10 +15,12 @@ WebRTC is a cutting edge serverless technology allows browsers(or peers) to talk
 Traditionally, building such an application from scratch requires a number of frameworks and libraries that deal with typical issues like packet loss, connection dropping, and NAT traversal. With WebRTC, all of this comes built-in into the browser by default. There is isn’t any need for plugins or third-party software, hence assisting in development.
 
 ### Features
-* Real time audio/video streaming.
-* Direct messaging among the users.
-* File transfer in a peer to peer manner.
-* Screen sharing for a great learning experience.
+* Real time 1:1 audio/video p2p streaming.
+* Send messages directly with privacy guarantees.
+* File sharing with chunking to speed up transfer and ensure reliability.
+* Screen sharing (full screen or tabs) for a great learning experience.
+* A/V controls to pause/unpause video or mute/unmute audio.
+* Fully responsive and can be used on mobile devices as well.
 
 ### Local Development
 To get started developing right away:
