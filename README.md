@@ -7,7 +7,7 @@ Visit the site in action at - https://edufluence.herokuapp.com
 * HTML, CSS, Javascript (ES6)
 * Node.js Backend
 * Socket.io for signaling
-* Netlify for Web hosting
+* Netlify for hosting
 
 ### Why WebRTC ?
 WebRTC is a cutting edge serverless technology allows browsers(or peers) to talk to each other and transmit data directly without the need for a centralized server, ensuring maximum security. WebRTC makes it possible to establish peer-to-peer connectivity to other web browsers easily. 
