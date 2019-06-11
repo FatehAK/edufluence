@@ -16,7 +16,7 @@ Traditionally, building such an application from scratch requires a number of fr
 
 ### Features
 * Real time 1:1 Audio/Video P2P streaming.
-* Send messages directly with privacy guarantees.
+* Send messages with privacy guarantees.
 * File sharing with chunking to speed up transfer and ensure reliability.
 * Screen sharing (full screen or tabs) for a great learning experience.
 * A/V controls to pause/unpause video or mute/unmute audio.
