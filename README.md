@@ -7,7 +7,7 @@ View the app live - https://edufluence.herokuapp.com
 * Node.js backend
 * ExpressJS for routes
 * Socket.io for signaling
-* HTML5, CSS, Javascript(ES6)
+* HTML5, CSS3, Javascript(ES6)
 * Heroku for hosting
 
 ### Why WebRTC ?
