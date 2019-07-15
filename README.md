@@ -1,12 +1,13 @@
 # Edufluence
-Edufluence is a learning app that connects students and experts around the world. Its primary goal is to help students acquire knowledge by consulting with the experts and using the real time browser technology *WebRTC* to simplify the process.
+Edufluence is a learning app that connects students and experts around the world. Its primary goal is to help students acquire knowledge by consulting with the experts and using the real time browser technology **WebRTC** to simplify the process. The app uses **Node.js** for its backend and **ExpressJS** for route management with **EJS** (Embedded JavaScript) for dynamic templating. The app is deployed to the **Heroku Cloud** for easy access.
 
-Visit the site in action at - https://edufluence.herokuapp.com
+View the app live - https://edufluence.herokuapp.com
 
 ### Tech Stack
-* HTML, CSS, Javascript (ES6)
 * Node.js backend
+* ExpressJS for routes
 * Socket.io for signaling
+* HTML5, CSS, Javascript(ES6)
 * Heroku for hosting
 
 ### Why WebRTC ?
