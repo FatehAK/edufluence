@@ -1,5 +1,5 @@
 # Edufluence
-Edufluence is a learning app that connects students and experts around the world. Its primary goal is to help students acquire knowledge by consulting with the experts and using the real time browser technology **WebRTC** to simplify the process. The app uses **Node.js** for its backend, **ExpressJS** for route management with **EJS** (Embedded JavaScript) for dynamic templating and **Socket.io** for signaling. The app is deployed to the **Heroku Cloud** for easy access.
+Edufluence aims to connect students and experts around the world to make knowledge open to all. It makes use of the underlying real-time browser technology **WebRTC** to provide a rich learning experience. The app uses **Node.js** for its backend, **ExpressJS** for route management with **EJS** (Embedded JavaScript) for dynamic templating and **Socket.io** for signaling. The app is deployed to the **Heroku Cloud** for easy access.
 
 View the app live - https://edufluence.herokuapp.com
 
@@ -12,8 +12,6 @@ View the app live - https://edufluence.herokuapp.com
 
 ### Why WebRTC ?
 WebRTC is a cutting edge serverless technology allows browsers(or peers) to talk to each other and transmit data directly without the need for a centralized server. WebRTC makes it possible to establish peer-to-peer connectivity to other web browsers easily. 
-
-Traditionally, building such an application from scratch requires a number of frameworks and libraries that deal with typical issues like packet loss, connection dropping, and NAT traversal. With WebRTC, all of this comes built-in into the browser by default. There is isn’t any need for plugins or third-party software, hence assisting in development.
 
 ### Features
 * Real time 1:1 Audio/Video P2P streaming.
