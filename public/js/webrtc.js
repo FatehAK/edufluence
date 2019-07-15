@@ -65,7 +65,6 @@ io.on('signal', async function(data) {
                 } else if (message.sdp.type === 'answer' && myUserType === 'student') {
                     console.log('answering');
                     await rtcPeerConn.setRemoteDescription(new RTCSessionDescription(message.sdp)).catch((err) => console.log(err));
-                } else {
                 }
             } else if (message.candidate) {
                 await setTimeout(() => {
