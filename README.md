@@ -1,5 +1,5 @@
 # Edufluence
-Edufluence aims to connect students and experts to foster collaboration and enable knowledge sharing. It makes use of the real-time browser technology **WebRTC** to provide a rich learning experience. The app uses **Node.js** for its backend, **ExpressJS** for route management and **Socket.io** for signaling. It is deployed to the **Heroku Cloud** for easy access.
+Edufluence students and experts to foster collaboration and enable knowledge sharing. It makes use of the real-time browser technology **WebRTC** to provide a rich learning experience. The app uses **Node.js** for its backend, **ExpressJS** for route management and **Socket.io** for signaling. It is deployed to the **Heroku Cloud** for easy access.
 
 View the app live - https://edufluence.herokuapp.com
 
