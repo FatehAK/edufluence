@@ -1,17 +1,17 @@
-var express = require('express.io');
-var app = express();
-app.http().io();
-var PORT = 3000;
-console.log('server started on port ' + PORT);
+const express = require('express.io');
+const app = express();
+const PORT = 3000;
 
+app.http().io();
+app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/public'));
 
+//normal routes
 app.get('/', function(req, res) {
-    res.render('index.ejs');
+    res.render('index');
 });
 
-app.listen(process.env.PORT || PORT);
-
+//realtime routes
 app.io.route('signal', function(req) {
     req.io.join(req.data);
     req.io.join('files');
@@ -29,3 +29,7 @@ app.io.route('files', function(req) {
         filesize: req.data.filesize
     });
 });
+
+//start server
+app.listen(process.env.PORT || PORT);
+console.log('server started on port ' + PORT);

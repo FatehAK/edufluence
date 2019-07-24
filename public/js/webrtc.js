@@ -25,7 +25,7 @@ const mainVideoArea = document.querySelector('#mainVideoTag');
 const smallVideoArea = document.querySelector('#smallVideoTag');
 let dataChannel;
 
-io.on('signal', async function(data) {
+io.on('signal', async (data) => {
     if (data.user_type === 'expert' && data.command === 'joinroom') {
         if (myUserType === 'student') {
             theirName = data.user_name;
@@ -94,18 +94,18 @@ function startSignaling() {
     dataChannel = rtcPeerConn.createDataChannel('mychannel');
     dataChannel.binaryType = 'arraybuffer';
 
-    dataChannel.onopen = function() {
+    dataChannel.onopen = () => {
         if (dataChannel.readyState === 'open') {
             console.log('Data Channel open');
             dataChannel.onmessage = receiveDataChannelMessage;
         }
     };
-    rtcPeerConn.ondatachannel = function(evt) {
+    rtcPeerConn.ondatachannel = (evt) => {
         console.log('Receiving a data channel');
         dataChannel = evt.channel;
         dataChannel.onmessage = receiveDataChannelMessage;
     };
-    rtcPeerConn.onicecandidate = function(evt) {
+    rtcPeerConn.onicecandidate = (evt) => {
         called = true;
         if (evt.candidate) {
             io.emit('signal', {
@@ -117,11 +117,11 @@ function startSignaling() {
     };
 
     let negotiating;
-    rtcPeerConn.onnegotiationneeded = async function() {
+    rtcPeerConn.onnegotiationneeded = async () => {
         console.log('on negotiation called');
         if (myUserType === 'student') {
             try {
-                if (negotiating || rtcPeerConn.signalingState != "stable") return;
+                if (negotiating || rtcPeerConn.signalingState != 'stable') return;
                 negotiating = true;
                 await rtcPeerConn.setLocalDescription(await rtcPeerConn.createOffer());
                 io.emit('signal', {
@@ -137,7 +137,7 @@ function startSignaling() {
         }
     };
 
-    rtcPeerConn.ontrack = function(evt) {
+    rtcPeerConn.ontrack = (evt) => {
         mainVideoArea.srcObject = evt.streams[0];
     };
 
@@ -146,13 +146,13 @@ function startSignaling() {
         video: true
     };
     navigator.mediaDevices.getUserMedia(constraints)
-        .then(function(stream) {
+        .then((stream) => {
             smallVideoArea.srcObject = stream;
-            stream.getTracks().forEach(function(track) {
+            stream.getTracks().forEach((track) => {
                 rtcPeerConn.addTrack(track, stream);
             });
         })
-        .catch(function(err) {
+        .catch((err) => {
             console.log(err);
         });
 }
@@ -219,7 +219,7 @@ function appendChatMessage(msg, className) {
     messageHolder.appendChild(div);
 }
 
-io.on('files', function(data) {
+io.on('files', (data) => {
     receivedFileName = data.filename;
     receivedFileSize = data.filesize;
     console.log('File on the way is ' + receivedFileName + ' (' + receivedFileSize + ')');
@@ -240,7 +240,7 @@ sendFile.addEventListener('change', function() {
     fileTransferring = true;
     fileProgress.max = file.size;
     let chunkSize = 16384;
-    let sliceFile = function(offset) {
+    let sliceFile = (offset) => {
         let reader = new FileReader();
         reader.onload = (function() {
             return function(e) {
@@ -296,38 +296,39 @@ pauseMyVideo.addEventListener('click', function() {
 /* screen sharing */
 const shareMyScreen = document.querySelector('#shareMyScreen');
 shareMyScreen.addEventListener('click', function() {
-    shareScreenText = '<i class="fas fa-desktop"></i>';
-    stopShareScreenText = '<i class="fas fa-stop"></i>';
+    let shareScreenText = '<i class="fas fa-desktop"></i>';
+    let stopShareScreenText = '<i class="fas fa-stop"></i>';
 
     if (shareMyScreen.innerHTML === shareScreenText) {
         let msg = 'Sharing my screen..';
         appendChatMessage(msg, 'message-in');
-        getScreenMedia(function(err, stream) {
-            if (err) {
-                console.log('failed: ' + err);
-            } else {
-                console.log('got a stream', stream);
+        //share the application window
+        if (navigator.mediaDevices.getDisplayMedia) {
+            //for chrome/firefox
+            navigator.mediaDevices.getDisplayMedia({ video: true })
+                .then((stream) => {
                 smallVideoArea.srcObject = stream;
-                stream.getTracks().forEach(function(track) {
+                stream.getTracks().forEach((track) => {
                     rtcPeerConn.addTrack(track, stream);
                 });
-            }
-        });
-        shareMyScreen.innerHTML = stopShareScreenText;
-        shareMyScreen.style.padding = '11px 17px 11px 17px';
+            });
+            shareMyScreen.innerHTML = stopShareScreenText;
+            shareMyScreen.style.padding = '11px 17px 11px 17px';
+        }
     } else {
+        //reset the stream to user video
         let constraints = {
             audio: true,
             video: true
         };
         navigator.mediaDevices.getUserMedia(constraints)
-            .then(function(stream) {
+            .then((stream) => {
                 smallVideoArea.srcObject = stream;
-                stream.getTracks().forEach(function(track) {
+                stream.getTracks().forEach((track) => {
                     rtcPeerConn.addTrack(track, stream);
                 });
             })
-            .catch(function(err) {
+            .catch((err) => {
                 console.log(err);
             });
         shareMyScreen.innerHTML = shareScreenText;

@@ -275,12 +275,8 @@ const headerRight = document.querySelector('.header-right');
 toggleMenu.addEventListener('click', function() {
     toggleMenu.classList.toggle('open');
     headerRight.classList.toggle('responsive');
-    toggleAbout.classList.toggle('animated');
-    toggleAbout.classList.toggle('slideInLeft');
-    toggleAbout.classList.toggle('faster');
-    toggleHelp.classList.toggle('animated');
-    toggleHelp.classList.toggle('slideInLeft');
-    toggleHelp.classList.toggle('faster');
+    toggleAbout.classList.add('animated', 'slideInLeft', 'faster');
+    toggleHelp.classList.add('animated', 'slideInLeft', 'faster');
 });
 
 //sidebar
