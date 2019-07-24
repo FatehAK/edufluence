@@ -333,7 +333,7 @@ toggleAbout.addEventListener('click', function(evt) {
         title: `<strong style="font-size: 1.15em; font-family: 'Josefin Sans', sans-serif;">About</strong>`,
         html: `
         <p style="text-align: justify; line-height: 28px; font-size: 1em;">
-            Edufluence is a learning app that connects students and experts around the world. This is possible using the real time browser technology -> <a href="https://www.innoarchitech.com/blog/what-is-webrtc-and-how-does-it-work" target="_blank"><strong>WebRTC</strong></a><br><br>
+            Edufluence is a learning app that connects students and experts around the world. This is possible using the real time browser technology ➞ <a href="https://www.innoarchitech.com/blog/what-is-webrtc-and-how-does-it-work" target="_blank"><strong>WebRTC</strong></a><br><br>
             <span>WebRTC is a cutting edge serverless technology allows browsers(or peers) to talk to each other and transmit data directly without the need for a centralized server, ensuring maximum security.</span><br><br>
             <span>Edufluence supports the following features:</span>
             <ul style="text-align: justify; line-height:28px;">
@@ -343,8 +343,7 @@ toggleAbout.addEventListener('click', function(evt) {
                 <li>Screen sharing for a great learning experience.</li>
             </ul>
         </p>
-        `,
-        footer: `<i style="margin: 5px 7px 0 0;" class="fas fa-info-circle"></i><span>For screen sharing you must install this <a href="https://chrome.google.com/webstore/detail/edushare/pahmpnjhabkdbkbongmidpbielbcpggo" target="_blank">extension</span>`
+        `
     });
     evt.preventDefault();
 });
@@ -364,8 +363,7 @@ toggleHelp.addEventListener('click', function(evt) {
                 <li>Enjoy your call with features such as video streaming, messaging, file and screen sharing.</li>
             </ol>
         </p>
-        `,
-        footer: `<i style="margin: 5px 7px 0 0;" class="fas fa-info-circle"></i><span>For screen sharing you must install this <a href="https://chrome.google.com/webstore/detail/edushare/pahmpnjhabkdbkbongmidpbielbcpggo" target="_blank">extension</span>`
+        `
     });
     evt.preventDefault();
 });
